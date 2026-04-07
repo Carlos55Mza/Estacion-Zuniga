@@ -26,8 +26,35 @@
             background: linear-gradient(135deg, #74b9ff 0%, #fab1a0 50%, #ffeaa7 100%);
             background-attachment: fixed;
             color: var(--text-dark); 
-            display: flex; justify-content: center;
+            display: flex; flex-direction: column; align-items: center;
         }
+
+        /* --- NUEVA MARQUESINA --- */
+        .marquesina-clima {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            color: white;
+            padding: 8px 0;
+            font-size: 0.8rem;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 100%;
+            border-bottom: 2px solid var(--money);
+            z-index: 1000;
+        }
+        .marquesina-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scroll-clima 50s linear infinite;
+        }
+        .marquesina-item { margin-right: 50px; text-transform: uppercase; }
+        .marquesina-item span { color: var(--accent); }
+        @keyframes scroll-clima {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        /* ------------------------ */
 
         .overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
@@ -51,26 +78,13 @@
         }
 
         .alerta-container {
-            margin-top: 15px;
-            padding: 10px 15px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid rgba(0,0,0,0.1);
-            background: white;
-            transition: all 0.3s ease;
+            margin-top: 15px; padding: 10px 15px; border-radius: 12px;
+            font-size: 0.85rem; font-weight: 800; display: flex;
+            align-items: center; gap: 10px; border: 1px solid rgba(0,0,0,0.1);
+            background: white; transition: all 0.3s ease;
         }
-        .alerta-zonda { 
-            background: #fff9c4; border: 2px solid #fbc02d; color: #856404; 
-            box-shadow: 0 4px 10px rgba(251, 192, 45, 0.3);
-        }
-        .alerta-sismo { 
-            background: #ffcdd2; border: 2px solid #e53935; color: #b71c1c; 
-            animation: vibrar 0.3s infinite;
-        }
+        .alerta-zonda { background: #fff9c4; border: 2px solid #fbc02d; color: #856404; box-shadow: 0 4px 10px rgba(251, 192, 45, 0.3); }
+        .alerta-sismo { background: #ffcdd2; border: 2px solid #e53935; color: #b71c1c; animation: vibrar 0.3s infinite; }
         @keyframes vibrar {
             0% { transform: translateX(0); }
             25% { transform: translateX(2px); }
@@ -82,8 +96,7 @@
         .weather-main-card {
             background: var(--glass); backdrop-filter: blur(10px);
             border-radius: 25px; border: 2px solid white;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             position: relative;
         }
 
@@ -135,6 +148,34 @@
     </style>
 </head>
 <body>
+    <div class="marquesina-clima">
+        <div class="marquesina-content">
+            <span class="marquesina-item">CABA: <span>19°</span> 🌤️</span>
+            <span class="marquesina-item">LA PLATA: <span>18°</span> ☁️</span>
+            <span class="marquesina-item">CÓRDOBA: <span>22°</span> ☀️</span>
+            <span class="marquesina-item">SANTA FE: <span>21°</span> 🌤️</span>
+            <span class="marquesina-item">PARANÁ: <span>20°</span> ⛅</span>
+            <span class="marquesina-item">POSADAS: <span>28°</span> ⛈️</span>
+            <span class="marquesina-item">CORRIENTES: <span>26°</span> 🌦️</span>
+            <span class="marquesina-item">FORMOSA: <span>29°</span> ☀️</span>
+            <span class="marquesina-item">RESISTENCIA: <span>27°</span> 🌤️</span>
+            <span class="marquesina-item">S.S. DE JUJUY: <span>24°</span> ☀️</span>
+            <span class="marquesina-item">SALTA: <span>23°</span> 🌤️</span>
+            <span class="marquesina-item">S.M. DE TUCUMÁN: <span>25°</span> ☀️</span>
+            <span class="marquesina-item">S.I. DEL ESTERO: <span>27°</span> ☀️</span>
+            <span class="marquesina-item">CATAMARCA: <span>26°</span> ☀️</span>
+            <span class="marquesina-item">LA RIOJA: <span>25°</span> ☀️</span>
+            <span class="marquesina-item">SAN JUAN: <span>24°</span> ☀️</span>
+            <span class="marquesina-item">SAN LUIS: <span>22°</span> 🌤️</span>
+            <span class="marquesina-item">SANTA ROSA: <span>19°</span> ⛅</span>
+            <span class="marquesina-item">NEUQUÉN: <span>17°</span> 💨</span>
+            <span class="marquesina-item">VIEDMA: <span>15°</span> 🌤️</span>
+            <span class="marquesina-item">RAWSON: <span>14°</span> ☁️</span>
+            <span class="marquesina-item">RÍO GALLEGOS: <span>9°</span> 🌦️</span>
+            <span class="marquesina-item">USHUAIA: <span>6°</span> ❄️</span>
+        </div>
+    </div>
+
     <div class="overlay"></div>
 
     <div class="wrapper">
@@ -335,50 +376,38 @@
         async function updateSismos() {
             const lista = document.getElementById('lista-sismos');
             try {
-                // Usamos una URL ultra-simple para evitar que el navegador la bloquee
                 const url = 'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&latitude=-32.89&longitude=-68.84&maxradiuskm=600&minmagnitude=2.5';
-                
                 const response = await fetch(url);
                 const data = await response.json();
-                
                 if (!data.features || data.features.length === 0) {
                     lista.innerHTML = '<div class="sismo-item">Sin sismos recientes</div>';
                     return;
                 }
-
                 lista.innerHTML = '';
-                // Tomamos los 3 más nuevos
                 const ultimosSismos = data.features.slice(0, 3);
-                
                 ultimosSismos.forEach(s => {
                     const mag = s.properties.mag.toFixed(1);
                     let lugar = s.properties.place;
-                    
-                    // Limpiamos el nombre del lugar para que quede bonito
                     if (lugar.includes('of ')) lugar = lugar.split('of ')[1];
                     lugar = lugar.replace(', Argentina', '').replace(', Chile', ' 🇨🇱');
-                    
                     const item = document.createElement('div');
                     item.className = 'sismo-item';
                     item.innerHTML = `<span class="sismo-mag">${mag}</span> ${lugar}`;
                     lista.appendChild(item);
                 });
             } catch (error) {
-                console.error("Error en sismos:", error);
                 lista.innerHTML = '<div class="sismo-item" style="color:red">Error de conexión</div>';
             }
         }
 
-        // --- INTERVALOS DE ACTUALIZACIÓN ---
-        setInterval(updateClock, 1000); // Reloj cada segundo
-        setInterval(updateSismos, 300000); // Sismos cada 5 min
-        setInterval(getDolar, 1800000); // Dólar cada 30 min
+        setInterval(updateClock, 1000);
+        setInterval(updateSismos, 300000);
+        setInterval(getDolar, 1800000);
         setInterval(() => {
             const select = document.getElementById('select-clima');
             updateWeatherLocation(select.value);
-        }, 600000); // Clima cada 10 min
+        }, 600000);
 
-        // --- CARGA INICIAL ---
         updateClock();
         getDolar();
         updateWeatherLocation("-33.08,-68.47,SAN MARTÍN");
