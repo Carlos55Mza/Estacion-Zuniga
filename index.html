@@ -171,7 +171,12 @@
                     <span id="alerta-mensaje">No hay alertas hoy</span>
                 </div>
             </div>
-            
+            <div style="background: #2c3e50; padding: 15px; border-radius: 10px; margin-top: 20px; border: 2px solid #e74c3c; color: white;">
+    <h3 style="margin-top: 0; font-size: 16px;"><span class="material-icons" style="vertical-align: middle;">emergency_share</span> Editor de Alertas</h3>
+    <input type="text" id="input-nueva-alerta" placeholder="Ej: Alerta Volcánica Maule - Nivel Verde" style="width: 70%; padding: 8px; border-radius: 5px; border: none;">
+    <button onclick="lanzarAlerta()" style="padding: 8px 12px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">PUBLICAR</button>
+    <button onclick="limpiarAlerta()" style="padding: 8px 12px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 5px;">Limpiar</button>
+</div>
             <div class="weather-main-card">
                 <div class="city-selector">
                     <select id="select-clima" onchange="updateWeatherLocation(this.value)">
@@ -389,6 +394,26 @@
             
            }
 
+function lanzarAlerta() {
+    const texto = document.getElementById('input-nueva-alerta').value;
+    const mensaje = document.getElementById('alerta-mensaje');
+    const icono = document.getElementById('alerta-icon');
+    const contenedor = document.getElementById('alerta-box');
+
+    if (texto.trim() !== "") {
+        mensaje.innerText = texto;
+        icono.innerText = "warning"; // Cambia el check por un triángulo
+        contenedor.style.backgroundColor = "#e74c3c"; // Fondo rojo
+        contenedor.style.color = "white";
+        document.getElementById('input-nueva-alerta').value = ""; // Limpia el buscador
+    }
+}
+
+function limpiarAlerta() {
+    document.getElementById('alerta-mensaje').innerText = "No hay alertas hoy";
+    document.getElementById('alerta-icon').innerText = "check_circle";
+    document.getElementById('alerta-box').style.backgroundColor = "#27ae60"; // Vuelve al verde (o el color que tengas)
+}
         async function getDolar() {
             try {
                 const res = await fetch('https://dolarapi.com/v1/dolares/blue?t=' + Date.now());
