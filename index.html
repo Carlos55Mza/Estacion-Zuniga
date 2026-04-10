@@ -154,6 +154,11 @@
         </div>
     </div>
 
+/* Esto esconde el panel de control para que nadie lo vea al entrar */
+.editor-zuniga, #panel-admin {
+    display: none !important;
+}
+
     <div class="overlay"></div>
 
     <div class="wrapper">
@@ -166,7 +171,7 @@
                     BLUE: <span id="dolar-val">...</span>
                 </div>
 
-               <div id="alerta-box" class="alerta-container">
+                <div id="alerta-box" class="alerta-container">
     <span id="alerta-icon" class="material-icons">check_circle</span>
     <span id="alerta-mensaje">No hay alertas hoy</span>
 </div>
@@ -409,6 +414,19 @@ const ESTADO_ACTUAL = 'tranquilo';
                 msj.innerText = "No hay alertas hoy";
             }
         }
+
+// Función para mostrar el panel si sos Carlos
+(function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('admin') === 'carlos') {
+        // Buscamos el panel (por clase o por ID para estar seguros)
+        const panel = document.querySelector('.editor-zuniga') || document.getElementById('panel-admin');
+        if (panel) {
+            panel.style.display = 'block';
+            panel.style.setProperty('display', 'block', 'important');
+        }
+    }
+})();
 
         function updateClock() {
             const now = new Date();
