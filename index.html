@@ -458,7 +458,26 @@ window.addEventListener('load', function() {
              style="max-width: 100%; height: auto;">
     </div>
 </div>
+<div class="editor-zuniga">
+    <h3 style="margin-top:0; font-size: 1rem; color: white;">📢 Panel de Alertas Zúñiga</h3>
+    <input type="text" id="input-nueva-alerta" placeholder="Escribí la alerta aquí..." 
+           style="width: 70%; padding: 8px; border-radius: 5px; border: none;">
+    
+    <button onclick="lanzarAlerta()" 
+            style="background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer;">
+            PUBLICAR
+    </button>
+    
+    <button onclick="limpiarAlerta()" 
+            style="background: #95a5a6; color: white; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-left: 5px;">
+            LIMPIAR
+    </button>
+</div>
 
+<div id="alerta-box" class="alerta-container" style="background: white; padding: 15px; border-radius: 12px; margin: 20px auto; width: 90%; display: flex; align-items: center; gap: 10px;">
+    <span class="material-symbols-outlined">notifications</span>
+    <span id="alerta-mensaje">Cargando alertas de la Estación...</span>
+</div>
     <script>
         const ESTADO_ACTUAL = 'tranquilo'; 
 
