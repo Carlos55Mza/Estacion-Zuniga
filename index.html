@@ -237,6 +237,13 @@
                     <a href="https://pagomiscuentas.com/" target="_blank" class="service-item"><span class="material-symbols-outlined" style="color:var(--money)">payments</span><span class="service-label">Pagos</span></a>
                 </div>
 
+<center>
+    <div style="display: inline-block; vertical-align: top; background: #fdfdfd; border: 1px solid #ddd; border-radius: 8px; padding: 10px; margin: 5px; width: 230px; text-align: center;">
+        <div style="color: #27ae60; font-weight: bold; font-size: 0.9em;">🏔️ PASO A CHILE</div>
+        <a href="https://www.argentina.gob.ar/seguridad/pasosinternacionales" target="_blank" style="display: inline-block; background: #27ae60; color: white; padding: 5px 10px; border-radius: 5px; text-decoration: none; font-size: 0.8em; margin-top: 5px;">VER ESTADO</a>
+    </div>
+
+    </center>
                 <div class="section-title" style="color: #27ae60;">DEPORTES Y LIGA ⚽</div>
                 <div class="services-grid" style="display: grid; gap: 8px;">
                     <a href="https://www.promiedos.com.ar/" target="_blank" class="service-item"><span class="material-symbols-outlined" style="color:#fcc419">trophy</span><span class="service-label">Promiedos</span></a>
@@ -462,11 +469,8 @@ const messaging = firebase.messaging();
     
     // El listado completo que me pasaste
     const ciudades = [
-        "CABA", "La Plata", "Córdoba", "Bahia Blanca", "Santa Fe", "Paraná", "Posadas", "Corrientes", 
-        "Formosa", "Resistencia", "Salta", "Tucumán", "San Juan", "San Luis", "Santa Rosa", 
-        "Neuquén", "Viedma", "Rawson", "Río Gallegos", "Ushuaia", "Islas Malvinas", "Rosario", 
-        "Mar del Plata", "Bariloche", "San Martín de los Andes", "Villa Mercedes", "Puerto Iguazú", 
-        "El Calafate", "——— 🌎 EL TIEMPO EN EL MUNDO 🌎 ———", 
+        "CABA", "La Plata", "Córdoba", "Bahia Blanca", "Santa Fe", "Paraná", "Posadas", "Corrientes", "Formosa", "Resistencia", "Salta", "Tucumán", "San Juan", "San Luis", "Santa Rosa", "Neuquén", "Viedma", "Rawson", "Río Gallegos", "Ushuaia", "Islas Malvinas", "Rosario", 
+        "Mar del Plata", "Bariloche", "San Martín de los Andes", "Villa Mercedes", "Puerto Iguazú", "El Calafate", "——— 🌎 EL TIEMPO EN EL MUNDO 🌎 ———", 
         "Madrid", "Barcelona", "Miami", "Nueva York", "Roma", "París", "Londres", "Río de Janeiro", 
         "Santiago", "Montevideo", "Asunción", "México DF", "Bogotá", "Lima", "Tokio", "Dubái"
     ];
@@ -572,7 +576,7 @@ const messaging = firebase.messaging();
 
     // Actualizar datos cada tanto tiempo
     setInterval(getDolar, 1800000); // 30 min
-    setInterval(actualizarMarquesina, 900000); // 15 min
+    setInterval(actualizarMarquesina, 300000); // 5 min
     setInterval(updateSismos, 300000); // 5 min
 
     if(window.location.search.includes('admin=carlos')) {
@@ -588,7 +592,7 @@ const messaging = firebase.messaging();
 </div>
 <div style="text-align: center; padding: 20px; color: #666; font-family: Arial, sans-serif; clear: both;">
     <hr style="width: 30%; border: 0.1px solid #ccc; margin: 20px auto;">
-    <p style="margin: 0; font-weight: bold;">Estación Zúñiga - 2026</p>
+    <p style="margin: 0; font-weight: bold;">Estación Zúñiga - 2026</p> 
     <p style="margin: 5px 0 0 0; font-size: 0.8em;">San Martín, Mendoza</p>
 </div>
 </html>
