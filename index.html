@@ -365,6 +365,39 @@
         <i>Fuente: USGS (Actualizado en vivo)</i>
     </div>
 </div>
+<div id="luna-container" style="background: rgba(0, 0, 0, 0.7); border: 2px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 15px; color: white; text-align: center; margin-top: 15px; backdrop-filter: blur(10px); box-shadow: 0 8px 16px rgba(0,0,0,0.3); max-width: 320px;">
+    <h4 style="margin: 0 0 10px 0; font-size: 0.8rem; text-transform: uppercase; color: #fffa65; letter-spacing: 1px;">Fase Lunar Actual</h4>
+    
+    <div id="luna-emoji" style="font-size: 45px; margin-bottom: 5px; filter: drop-shadow(0 0 10px rgba(255,250,101,0.5));">🌘</div>
+    <div id="luna-nombre" style="font-size: 1.2rem; font-weight: 900; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Luna Menguante</div>
+    
+    <div style="background: rgba(255,255,255,0.1); border-radius: 10px; padding: 8px; margin-top: 12px;">
+        <p style="font-size: 0.7rem; margin: 0; color: #ddd;">Próxima Luna Nueva:</p>
+        <p style="font-size: 0.9rem; margin: 2px 0 0 0; font-weight: bold; color: #fff;">17 de Abril</p>
+    </div>
+</div>
+
+<script>
+    // Este pequeño script ajusta la luna hoy 15/04/2026
+    function actualizarLuna() {
+        const emoji = document.getElementById('luna-emoji');
+        const nombre = document.getElementById('luna-nombre');
+        const hoy = new Date();
+        const dia = hoy.getDate();
+        const mes = hoy.getMonth() + 1; // Abril es 4
+
+        // Lógica simple para Mendoza en Abril 2026
+        if (dia >= 13 && dia <= 16) {
+            emoji.innerHTML = "🌘";
+            nombre.innerHTML = "Luna Menguante";
+        } else if (dia >= 17 && dia <= 19) {
+            emoji.innerHTML = "🌑";
+            nombre.innerHTML = "Luna Nueva";
+        }
+        // ... después podemos agregar el resto de las fases
+    }
+    actualizarLuna();
+</script>
 
 <script>
     // Diccionario extendido de banderas
@@ -534,13 +567,17 @@ const messaging = firebase.messaging();
     const key = "7a3c696b0a174cbd8fd174435261004";
     const container = document.getElementById('marquesina-dinamica');
     
-    // El listado completo que me pasaste
-    const ciudades = [
-        "CABA", "La Plata", "Córdoba", "Bahia Blanca", "Santa Fe", "Paraná", "Posadas", "Corrientes", "Formosa", "Resistencia", "Salta", "Tucumán", "San Juan", "San Luis", "Santa Rosa", "Neuquén", "Viedma", "Rawson", "Río Gallegos", "Ushuaia", "Islas Malvinas", "Rosario", 
-        "Mar del Plata", "Bariloche", "San Martín de los Andes", "Villa Mercedes", "Puerto Iguazú", "El Calafate", "——— 🌎 EL TIEMPO EN EL MUNDO 🌎 ———", 
-        "Madrid", "Barcelona", "Miami", "Nueva York", "Roma", "París", "Londres", "Río de Janeiro", 
-        "Santiago", "Montevideo", "Asunción", "México DF", "Bogotá", "Lima", "Tokio", "Dubái"
-    ];
+   // El listado actualizado con más presencia regional
+const ciudades = [
+    "CABA", "La Plata", "Córdoba", "Bahia Blanca", "Santa Fe", "Paraná", "Posadas", "Corrientes", "Formosa", "Resistencia", "Salta", "Tucumán", "San Juan", "San Luis", "Santa Rosa", "Neuquén", "Viedma", "Rawson", "Río Gallegos", "Ushuaia", "Rosario", 
+    "Mar del Plata", "Bariloche", "San Martín de los Andes", "Villa Mercedes", "Puerto Iguazú", "El Calafate", 
+    "——— 🌎 VECINOS Y MUNDO 🌎 ———", 
+    "Santiago", "Valparaíso", "Los Andes", // Chile bien presente
+    "Montevideo", "Punta del Este",       // Uruguay
+    "Asunción", "Encarnación",            // Paraguay
+    "Madrid", "Miami", "Nueva York", "Roma", "París", "Río de Janeiro", 
+    "México DF", "Bogotá", "Lima", "Tokio"
+];
 
     let htmlFinal = '';
 
@@ -688,6 +725,5 @@ const messaging = firebase.messaging();
             ¡Gracias por colaborar con el búnker!
         </p>
     </div>
-</div>
 </footer>
 </html>
