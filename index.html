@@ -24,6 +24,16 @@
         --cafecito: #e67e22;
     }
     
+/* EL MAZO: Esto obliga a los iconos a juntarse */
+.container, .grid, [class*="container"], [class*="grid"] {
+    gap: 10px !important; /* Achica el espacio entre cajas */
+    padding: 10px !important; /* Achica el margen de los bordes */
+}
+
+.card, .box, [class*="card"], [class*="box"] {
+    margin: 5px !important; /* Quita el aire de afuera de cada icono */
+}
+
     body {
         background-image: url('https://amoviajar.info/wp-content/uploads/2023/12/andes-argentinos.jpg');
         background-size: cover;
@@ -155,7 +165,7 @@ vertical-align: middle;
         border-left: 4px solid #e74c3c; border: 1px solid rgba(255,255,255,0.5);
     }
 
-    @media (max-width: 600px) { 
+    @media (max-width: 8px) { 
         .top-grid { grid-template-columns: 1fr; } 
         .weather-main-card { max-width: 100%; width: 100%; box-sizing: border-box; }
         #clock { font-size: 3rem; }
@@ -238,6 +248,22 @@ vertical-align: middle;
             <span style="margin-left: 5px;">EL PLUMERILLO</span>
         </a>
     </div>
+<div id="sector-publicidad" style="background: linear-gradient(145deg, #1a1a1a, #222); border: 2px solid #333; border-radius: 12px; margin: 10px 15px; padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+    
+    <a id="link-whatsapp" href="https://wa.me/5492634XXXXXX?text=Hola%20Carlos,%20vi%20tu%20web%20y%20quiero%20publicitar" target="_blank" style="text-decoration: none; display: block; color: white;">
+        
+        <p style="margin: 0; font-size: 0.65rem; color: #ffcc00; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">Publicidad Destacada (Click para consultar)</p>
+        
+        <div style="margin-top: 8px; min-height: 50px; display: flex; flex-direction: column; justify-content: center;">
+            <div id="publi-nombre" style="font-size: 1.3rem; font-weight: bold; color: #00ff00; transition: opacity 0.5s;">Cargando...</div>
+            <div id="publi-info" style="font-size: 0.85rem; color: #ddd; margin-top: 3px; transition: opacity 0.5s;">-</div>
+        </div>
+        
+    </a>
+
+</div>
+    </div>
+</div>
 
 
 </div>
@@ -415,6 +441,8 @@ vertical-align: middle;
         <i>Fuente: USGS (Actualizado en vivo)</i>
     </div>
 </div>
+
+
 <div id="luna-container" style="background: rgba(0, 0, 0, 0.7); border: 2px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 15px; color: white; text-align: center; margin-top: 15px; backdrop-filter: blur(10px); box-shadow: 0 8px 16px rgba(0,0,0,0.3); max-width: 320px;">
     <h4 style="margin: 0 0 10px 0; font-size: 0.8rem; text-transform: uppercase; color: #fffa65; letter-spacing: 1px;">Fase Lunar Actual</h4>
     
@@ -733,6 +761,55 @@ const ciudades = [
 
 </script> 
 
+
+<script>
+(function() {
+    // 1. Datos
+    var datosPubli = [
+        { n: "PÁDEL DEL ESTE", i: "Turnos al 2634-112233" },
+        { n: "FERRETERÍA ZÚÑIGA", i: "Lo mejor en herramientas" },
+        { n: "KIOSCO EL SOL", i: "Abierto las 24hs - San Martín" },
+        { n: "REPUESTOS MENDOZA", i: "Envíos a domicilio" },
+        { n: "¡PUBLICITE AQUÍ!", i: "Consulte al 2634-4277869" }
+    ];
+
+    var index = 0;
+
+    // 2. La función que cambia el texto
+    function actualizarCartel() {
+        var elNombre = document.getElementById('publi-nombre');
+        var elInfo = document.getElementById('publi-info');
+
+        if (elNombre && elInfo) {
+            // Animación simple de salida
+            elNombre.style.opacity = 0;
+            elInfo.style.opacity = 0;
+
+            setTimeout(function() {
+                elNombre.innerText = datosPubli[index].n;
+                elInfo.innerText = datosPubli[index].i;
+                
+                // Animación de entrada
+                elNombre.style.opacity = 1;
+                elInfo.style.opacity = 1;
+                
+                // Avanzar al siguiente
+                index = (index + 1) % datosPubli.length;
+            }, 500);
+        }
+    }
+
+    // 3. El "Arrancador" Manual
+    // Intentamos arrancar cada 1 segundo hasta que el cartel exista
+    var checkExist = setInterval(function() {
+        if (document.getElementById('publi-nombre')) {
+            actualizarCartel(); // Primera carga
+            setInterval(actualizarCartel, 10000); // Rotación cada 10 seg
+            clearInterval(checkExist); // Dejamos de buscar el cartel
+        }
+    }, 1000);
+})();
+</script>
 <script>
 // USAMOS UN "TRY-CATCH" PARA CADA COSA, ASÍ NO SE MOLESTAN
 async function cargarFinanzas() {
