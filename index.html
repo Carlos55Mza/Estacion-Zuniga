@@ -24,6 +24,53 @@
         --cafecito: #e67e22;
     }
     
+
+/* DISEÑO DEL CUADRO PASO A CHILE */
+.card-paso {
+    background: var(--glass); /* Usa el mismo efecto de vidrio que el clima */
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 2px solid white;
+    padding: 15px;
+    text-align: center;
+    max-width: 280px; 
+    margin: 10px auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.card-paso h3 { 
+    font-size: 0.8rem; 
+    color: #2d3436; 
+    margin-bottom: 8px; 
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#estado-paso-box {
+    font-size: 1.1rem;
+    font-weight: 800;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.4); /* Fondo sutil */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Las luces de estado */
+.status-icon { font-size: 1.4rem; }
+.paso-abierto { color: #00b894; } /* Verde esmeralda */
+.paso-cerrado { color: #d63031; } /* Rojo intenso */
+
+.paso-update { 
+    font-size: 0.65rem; 
+    color: #636e72; 
+    margin-top: 10px; 
+    font-style: italic;
+}
+
+
 /* EL MAZO: Esto obliga a los iconos a juntarse */
 .container, .grid, [class*="container"], [class*="grid"] {
     gap: 10px !important; /* Achica el espacio entre cajas */
@@ -170,6 +217,29 @@ vertical-align: middle;
         .weather-main-card { max-width: 100%; width: 100%; box-sizing: border-box; }
         #clock { font-size: 3rem; }
     }
+
+/* CIRUGÍA DE ESPACIOS PARA EL BÚNKER */
+
+.top-grid { 
+    display: flex !important; 
+    flex-direction: column !important; /* Los pone uno abajo del otro */
+    gap: 0px !important;              /* ELIMINA el espacio entre cuadros */
+}
+
+.weather-main-card {
+    margin-top: 0 !important;
+    margin-bottom: 5px !important;    /* Solo un poquito de aire abajo */
+}
+
+.clock-section {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+#clock {
+    line-height: 0.9 !important;      /* Pega los números del reloj */
+}
+
 </style>
 </head>
 <body>
@@ -230,6 +300,17 @@ vertical-align: middle;
     <div style="font-size: 1.4rem; font-weight: 900; color: #333; margin-bottom: 8px; font-family: sans-serif;">
         JUEVES, 16 DE ABRIL
     </div>
+
+</div> 
+
+<div class="card-paso">
+    <h3>PASO CRISTO REDENTOR</h3>
+    <div id="estado-paso-box">
+        <span class="status-icon" id="paso-luz">●</span>
+        <span id="paso-texto">CARGANDO...</span>
+    </div>
+    <p class="paso-update">Sincronizado con Gendarmería</p>
+</div>
 
     <div style="display: flex; flex-direction: column; gap: 6px;">
         
@@ -416,21 +497,7 @@ vertical-align: middle;
 </script></script>
 <div style="background: #ffffff; border: 2px solid #333333; border-radius: 5px; padding: 10px; margin: 10px; width: 280px; text-align: center; font-family: sans-serif; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">
     
-    <div style="font-weight: bold; color: #333; font-size: 1em; margin-bottom: 5px;">🏔️ PASO CRISTO REDENTOR</div>
-
-    <div style="background: #27ae60; color: white; padding: 6px; border-radius: 5px; font-size: 1.1em; font-weight: bold; margin-bottom: 8px;">
-        ✅ ABIERTO
-    </div>
-
-    <div style="text-align: left; font-size: 0.7em; color: #444; line-height: 1.1; margin: 0 5px;">
-        📍 <b>Uspallata:</b> Despejado ☀️<br>
-        📍 <b>Pta. de Vacas:</b> Nublado ⛅<br>
-        📍 <b>Puente del Inca:</b> Ventoso 💨<br>
-        📍 <b>Las Cuevas:</b> Nevadas leves ❄️
-    </div>
-
-    <div style="margin-top: 6px; font-size: 0.75em; color: #777; border-top: 1px solid #eee; padding-top: 4px;">
-        <i>Actualizado: 9:00 hs</i>
+   
 </div>
 </div>
 <div id="cuadro-sismos" style="background: #ffffff; border: 2px solid #333333; border-radius: 5px; padding: 10px; margin: 10px; width: 280px; text-align: center; font-family: sans-serif; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); box-sizing: border-box; display: inline-block; vertical-align: top;">
@@ -875,6 +942,40 @@ setTimeout(cargarFinanzas, 1000);
     // La ejecutamos un poquito después que el resto
     setTimeout(controlarAlerta, 2000);
 </script>
+
+<script>
+function actualizarEstadoPaso() {
+    const luz = document.getElementById('paso-luz');
+    const texto = document.getElementById('paso-texto');
+    
+    // Por ahora lo seteamos automático basado en el horario de invierno (17 de abril)
+    // El paso suele cerrar a las 21:00 hs en esta época.
+    const ahora = new Date();
+    const hora = ahora.getHours();
+    
+    // Simulación de lógica inteligente:
+    // Si es de noche o si hay una alerta (esto se puede conectar a un feed real luego)
+    let pasoAbierto = true; 
+
+    if (hora >= 21 || hora < 9) {
+        pasoAbierto = false; // Cierre por horario de invierno
+    }
+
+    if(pasoAbierto) {
+        luz.className = "status-icon paso-abierto";
+        luz.innerHTML = "●";
+        texto.innerText = "HABILITADO";
+    } else {
+        luz.className = "status-icon paso-cerrado";
+        luz.innerHTML = "●";
+        texto.innerText = "CERRADO";
+    }
+}
+
+// Se ejecuta al cargar la página
+actualizarEstadoPaso();
+</script>
+
 
 </body>
 <div style="width: 100%; background: linear-gradient(90deg, #d32f2f, #b71c1c); color: white; margin: 25px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.6); border-top: 2px solid #ff5252; border-bottom: 2px solid #ff5252; overflow: hidden;">
