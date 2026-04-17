@@ -57,18 +57,18 @@
         border-bottom: 3px solid #0984e3; 
     }
     .marquesina-content { 
-        display: block; 
-        white-space: nowrap; 
-        padding-left: 20%; 
-        animation: scroll-clima 150s linear infinite; 
-    }
+    display: inline-block; /* Cambiamos block por inline-block */
+    white-space: nowrap; 
+    padding-left: 50%; /* Bajamos el espacio inicial para que aparezca antes */
+    animation: scroll-clima 60s linear infinite; 
+}
     .marquesina-item { margin-right: 80px; text-transform: uppercase; }
     .marquesina-item span { color: #fffa65; }
 
     @keyframes scroll-clima { 
-        0% { transform: translateX(0); } 
-        100% { transform: translateX(-100%); } 
-    }
+    0% { transform: translateX(0); } 
+    100% { transform: translateX(-100%); } 
+}
 
     .overlay { 
         position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
