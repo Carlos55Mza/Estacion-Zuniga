@@ -479,10 +479,9 @@ vertical-align: middle;
         <div class="main-content">
            
 <div style="text-align: left; margin-left: 10px;">
-    <div style="font-size: 1.4rem; font-weight: 900; color: #333; margin-bottom: 8px; font-family: sans-serif;">
-        JUEVES, 16 DE ABRIL
-    </div>
-
+    <div id="fecha-dinamica" style="font-size: 1.4rem; font-weight: 900; color: #333; margin-bottom: 8px; font-family: sans-serif;">
+        </div>
+</div>
 <div class="card-paso">
     <h3>PASO CRISTO REDENTOR</h3>
     <div id="estado-paso-box">
@@ -786,6 +785,25 @@ setInterval(cargarSismos, 900000);
         // ... después podemos agregar el resto de las fases
     }
     actualizarLuna();
+
+function ponerFechaActual() {
+    const ahora = new Date();
+    const opciones = { 
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long' 
+    };
+    
+    // Formatea la fecha y la pone en Mayúsculas
+    let fechaHoy = ahora.toLocaleDateString('es-AR', opciones).toUpperCase();
+    
+    // La inyecta en el HTML
+    document.getElementById('fecha-dinamica').innerText = fechaHoy;
+}
+
+// Ejecutar al cargar
+ponerFechaActual();
+
 </script>
 
 <script>
