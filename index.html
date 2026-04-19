@@ -387,6 +387,40 @@ vertical-align: middle;
     color: #888;
 }
 
+.emergencias-mini-bunker {
+    width: 95%;
+    max-width: 350px;
+    margin: 10px auto;
+    font-family: sans-serif;
+}
+
+.em-mini-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos por fila, pero bajitos */
+    gap: 5px;
+}
+
+.em-item {
+    text-decoration: none;
+    color: white;
+    font-size: 0.75rem; /* Letra bien chiquita y legible */
+    font-weight: bold;
+    padding: 6px 10px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+}
+
+/* Colores más sobrios */
+.red-mini { background: #d63031; }
+.blue-mini { background: #0984e3; }
+.orange-mini { background: #e67e22; }
+.green-mini { background: #27ae60; }
+
+.em-item:active { background: #333; } /* Efecto al tocar */
+
 </style>
 </head>
 <body>
@@ -562,6 +596,15 @@ vertical-align: middle;
 
 <div id="columna-izquierda" style="width: 280px; margin: 30px; display: inline-block; vertical-align: top;">
 
+<div class="emergencias-mini-bunker">
+    <div class="em-mini-grid">
+        <a href="tel:911" class="em-item red-mini">🚑 911</a>
+        <a href="tel:02634421111" class="em-item blue-mini">🏥 Perrupato</a>
+        <a href="tel:100" class="em-item orange-mini">🚒 100</a>
+        <a href="tel:02634428999" class="em-item green-mini">🚓 Policía</a>
+    </div>
+</div>
+
 
     <button class="boton-desplegable">DIARIOS 🗞️ <span>▼</span></button>
     <div class="contenido-menu">
@@ -587,7 +630,8 @@ vertical-align: middle;
 	<a href="https://youtu.be/P5kePDsFUBg" target="_blank">TV Pública (En Vivo)</a>
 	<a href="https://youtu.be/SF06Qy1Ct6Y" target="_blank">C5N (En Vivo)</a>
         <a href="https://youtu.be/ArKbAx1K-2U" target="_blank">A24 (En Vivo)</a>
-	<a href="https://youtu.be/6Pi56InbEEc" target="_blank">TyC SPORT PLAY (En Vivo)</a>
+	<a href="https://youtu.be/6Hu1Cxc80jI?list=PLQ3qY-8lWxfm4Jm7cWzpyy6IzHu3pV21P" target="_blank">Canal Rural (En Vivo)</a>
+	<a href="https://youtu.be/ArKbAx1K-2U" target="_blank">Canal de la Ciudad (En Vivo)</a>
     </div>
 
     <button class="boton-desplegable">SERVICIOS 💼 <span>▼</span></button>
