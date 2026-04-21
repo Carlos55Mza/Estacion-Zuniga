@@ -818,49 +818,63 @@ async function actualizarUV() {
     const barra = document.getElementById('uv-progreso');
     const consejo = document.getElementById('uv-consejo');
 
+    // 1. OBTENEMOS LA HORA DE SAN MARTÍN AHORA MISMO
+    const ahora = new Date();
+    const horaActual = ahora.getHours();
+
     try {
-        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=-33.0811&longitude=-68.4681&daily=uv_index_max&timezone=auto');
+        // Agregamos un número aleatorio al final del link para que no use datos viejos (caché)
+        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=-33.0811&longitude=-68.4681&daily=uv_index_max&timezone=auto&cachebuster=${ahora.getTime()}`);
         const data = await res.json();
+        
         let uv = data.daily.uv_index_max[0];
 
-        // --- FILTRO DE NOCHE PARA ESTACIÓN ZÚÑIGA ---
-        const horaActual = new Date().getHours();
-        // Si son más de las 20:00 o antes de las 08:00, el UV es cero
+        // 2. LA "REGLA DE HIERRO" DEL BÚNKER ZÚÑIGA
+        // Si son las 20:00 o más, o si es antes de las 08:00... ¡ES CERO!
         if (horaActual >= 20 || horaActual < 8) {
             uv = 0;
         }
-        // --------------------------------------------
 
+        // 3. ACTUALIZAMOS LA PANTALLA
         valorTxt.innerText = uv.toFixed(1);
         
         let porcentaje = (uv / 11) * 100;
         barra.style.width = Math.min(porcentaje, 100) + "%";
 
-        // Lógica de colores y consejos (Actualizada con la Noche)
-        if (uv === 0) {
+        // 4. COLORES SEGÚN EL RIESGO (Incluyendo el Cero)
+        if (uv <= 0) {
             barra.style.backgroundColor = "#2ecc71"; // Verde
-            consejo.innerText = "Sin radiación. Ideal para estar afuera.";
+            barra.style.width = "0%"; // La barra desaparece si es cero
+            consejo.innerText = "Noche en San Martín. Sin radiación solar.";
         } else if (uv <= 2) {
-            barra.style.backgroundColor = "#2ecc71"; // Verde
+            barra.style.backgroundColor = "#2ecc71"; 
             consejo.innerText = "Riesgo bajo. Podes estar afuera.";
         } else if (uv <= 5) {
-            barra.style.backgroundColor = "#f1c40f"; // Amarillo
+            barra.style.backgroundColor = "#f1c40f"; 
             consejo.innerText = "Riesgo moderado. Usa gorra.";
         } else if (uv <= 7) {
-            barra.style.backgroundColor = "#e67e22"; // Naranja
-            consejo.innerText = "Riesgo alto. Usa protector solar.";
+            barra.style.backgroundColor = "#e67e22"; 
+            consejo.innerText = "Riesgo alto. Usa protector.";
         } else if (uv <= 10) {
-            barra.style.backgroundColor = "#e74c3c"; // Rojo
-            consejo.innerText = "Riesgo muy alto. Busca la sombra.";
+            barra.style.backgroundColor = "#e74c3c"; 
+            consejo.innerText = "Riesgo muy alto. Sombra obligatoria.";
         } else {
-            barra.style.backgroundColor = "#9b59b6"; // Violeta
-            consejo.innerText = "¡Extremo! No salgas si no es necesario.";
+            barra.style.backgroundColor = "#9b59b6"; 
+            consejo.innerText = "¡Extremo! Cuidado total.";
         }
+
     } catch (e) {
-        consejo.innerText = "Dato UV no disponible.";
+        console.log("Error UV:", e);
+        // Si falla la API, por lo menos que en la noche marque 0
+        if (horaActual >= 20 || horaActual < 8) {
+            valorTxt.innerText = "0.0";
+            barra.style.width = "0%";
+            consejo.innerText = "Noche. Sin radiación.";
+        }
     }
 }
 
+// Ejecutamos
 actualizarUV();
 
 </script></script>
