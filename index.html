@@ -561,20 +561,28 @@ vertical-align: middle;
     </div>
 <div class="seccion-columna" style="display: block; width: 350px; float: left; clear: left; margin: 10px;">
     
-    <div id="sector-publicidad" style="background: rgba(0, 0, 0, 0.7); border: 1px solid #444; border-radius: 10px; padding: 12px; box-sizing: border-box;">
-        
-        <a id="link-whatsapp" href="https://wa.me/5492634277869?text=Hola%20Carlos,%20vi%20tu%20web%20y%20quiero%20publicitar" target="_blank" style="text-decoration: none; display: block; color: white;">
-            
-            <p style="margin: 0; font-size: 0.6rem; color: #ffcc00; text-transform: uppercase; font-weight: bold; text-align: left;">Auspiciante</p>
-            
-            <div style="min-height: 45px; display: flex; flex-direction: column; justify-content: center; text-align: left;">
-                <div id="publi-nombre" style="font-size: 1.2rem; font-weight: bold; color: #00ff00; margin: 0; line-height: 1.2;">Cargando...</div>
-                <div id="publi-info" style="font-size: 0.8rem; color: #ccc; margin: 0;">-</div>
-            </div>
-            
-        </a>
-
+    <div id="carrusel-publicidad" style="display: block; width: 95%; max-width: 350px; height: 180px; margin: 15px auto; overflow: hidden; border-radius: 8px; border: 3px solid #f1c40f; position: relative; font-family: sans-serif; background: #fff; box-shadow: 3px 3px 10px rgba(0,0,0,0.2); box-sizing: border-box;">
+    
+    <a href="https://wa.me/542634520709?text=Hola%20Fabián,%20vi%20su%20anuncio%20en%20Estacion%20Zuñiga" target="_blank" class="anuncio" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 10px; text-decoration: none; color: inherit;">
+    
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2yl4h5GYb8Xy4C2fYI7TLMvp-25FRGZxDJw&s" alt="Tornería Don Julián" style="height: 80px; width: auto; margin-bottom: 8px; border-radius: 4px; object-fit: contain;">
+    
+    <div style="font-size: 1.1em; font-weight: bold; color: #2c3e50; margin-bottom: 2px;">TORNERÍA DON JULIÁN</div>
+    <div style="font-size: 0.8em; color: #333; text-align: center; font-weight: bold;">Mecanizados de Precisión</div>
+    <div style="font-size: 0.7em; color: #666; text-align: center;">Trabajos en Control Numérico (CNC)</div>
+    
+    <div style="font-size: 0.75em; color: #25D366; font-weight: bold; margin-top: 5px; border-top: 1px solid #eee; width: 80%; text-align: center; pt: 5px;">
+        Consultas al WhatsApp 📲
     </div>
+</a>
+
+    <a href="https://wa.me/5492634277869?text=Hola,%20quiero%20publicitar%20en%20la%20web" target="_blank" class="anuncio" style="display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 10px; text-decoration: none; color: inherit;">
+        <img src="https://i.postimg.cc/fTtnz3pL/images.jpg" alt="Logo" style="height: 60px; width: auto; margin-bottom: 5px; object-fit: contain;">
+        <div style="font-size: 1em; font-weight: bold; color: #333;">PUBLICITE AQUÍ</div>
+        <div style="font-size: 0.75em; color: #777;">Llegue a todo San Martín 🚀</div>
+    </a>
+
+</div>
 <div id="bunker-sismos-global" class="sismo-global-container" style="display: none;">
     <div class="sismo-titulo">🔴 ÚLTIMOS SISMOS MUNDIALES</div>
     <div id="lista-sismos-mundo">
@@ -789,19 +797,28 @@ async function actualizarUV() {
     const consejo = document.getElementById('uv-consejo');
 
     try {
-        // Usamos las coordenadas de San Martín, Mendoza
         const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=-33.0811&longitude=-68.4681&daily=uv_index_max&timezone=auto');
         const data = await res.json();
-        const uv = data.daily.uv_index_max[0];
+        let uv = data.daily.uv_index_max[0];
+
+        // --- FILTRO DE NOCHE PARA ESTACIÓN ZÚÑIGA ---
+        const horaActual = new Date().getHours();
+        // Si son más de las 20:00 o antes de las 08:00, el UV es cero
+        if (horaActual >= 20 || horaActual < 8) {
+            uv = 0;
+        }
+        // --------------------------------------------
 
         valorTxt.innerText = uv.toFixed(1);
         
-        // Calculamos el ancho (máximo 11 para el 100%)
         let porcentaje = (uv / 11) * 100;
         barra.style.width = Math.min(porcentaje, 100) + "%";
 
-        // Lógica de colores y consejos
-        if (uv <= 2) {
+        // Lógica de colores y consejos (Actualizada con la Noche)
+        if (uv === 0) {
+            barra.style.backgroundColor = "#2ecc71"; // Verde
+            consejo.innerText = "Sin radiación. Ideal para estar afuera.";
+        } else if (uv <= 2) {
             barra.style.backgroundColor = "#2ecc71"; // Verde
             consejo.innerText = "Riesgo bajo. Podes estar afuera.";
         } else if (uv <= 5) {
@@ -1168,53 +1185,25 @@ const ciudades = [
 
 
 <script>
-(function() {
-    // 1. Datos
-    var datosPubli = [
-        { n: "¡PUBLICITE AQUÍ!", i: "Consulte al 2634-277869" },
-        { n: "¡PUBLICITE AQUÍ!", i: "precios al 2634-277869" },
-        { n: "¡PUBLICITE AQUÍ!", i: "Consulte al 2634-277869" },
-        { n: "¡PUBLICITE AQUÍ!", i: "precios al 2634-277869" },
-        { n: "¡PUBLICITE AQUÍ!", i: "Consulte al 2634-277869" }
-    ];
+let indiceAnuncio = 0;
+    const anuncios = document.querySelectorAll('#carrusel-publicidad .anuncio');
 
-    var index = 0;
-
-    // 2. La función que cambia el texto
-    function actualizarCartel() {
-        var elNombre = document.getElementById('publi-nombre');
-        var elInfo = document.getElementById('publi-info');
-
-        if (elNombre && elInfo) {
-            // Animación simple de salida
-            elNombre.style.opacity = 0;
-            elInfo.style.opacity = 0;
-
-            setTimeout(function() {
-                elNombre.innerText = datosPubli[index].n;
-                elInfo.innerText = datosPubli[index].i;
-                
-                // Animación de entrada
-                elNombre.style.opacity = 1;
-                elInfo.style.opacity = 1;
-                
-                // Avanzar al siguiente
-                index = (index + 1) % datosPubli.length;
-            }, 500);
-        }
+    function rotarAnuncios() {
+        // Ocultamos el anuncio actual
+        anuncios[indiceAnuncio].style.setProperty('display', 'none', 'important');
+        
+        // Pasamos al siguiente
+        indiceAnuncio = (indiceAnuncio + 1) % anuncios.length;
+        
+        // Mostramos el nuevo
+        anuncios[indiceAnuncio].style.setProperty('display', 'flex', 'important');
     }
 
-    // 3. El "Arrancador" Manual
-    // Intentamos arrancar cada 1 segundo hasta que el cartel exista
-    var checkExist = setInterval(function() {
-        if (document.getElementById('publi-nombre')) {
-            actualizarCartel(); // Primera carga
-            setInterval(actualizarCartel, 10000); // Rotación cada 10 seg
-            clearInterval(checkExist); // Dejamos de buscar el cartel
-        }
-    }, 1000);
-})();
+    // Cambia cada 10 segundos (10000 milisegundos)
+    setInterval(rotarAnuncios, 10000);
+</script>})();
 </script>
+
 <script>
 // USAMOS UN "TRY-CATCH" PARA CADA COSA, ASÍ NO SE MOLESTAN
 async function cargarFinanzas() {
