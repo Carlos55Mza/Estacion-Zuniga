@@ -569,15 +569,15 @@ vertical-align: middle;
     </a>
 </div>
 
-<div class="uv-card">
-    <div class="uv-header">
-        <span>ÍNDICE UV ACTUAL</span>
-        <span id="uv-valor">--</span>
+<div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center;">
+    <h4 style="margin: 0; color: #555;">Índice UV Actual</h4>
+    <div id="uv-valor" style="font-size: 32px; font-weight: bold; margin: 10px 0;">0.0</div>
+    
+    <div style="background: #ddd; height: 10px; border-radius: 5px; overflow: hidden; margin: 10px auto; width: 80%;">
+        <div id="uv-progreso" style="width: 0%; height: 100%; background-color: #2ecc71; transition: width 0.5s;"></div>
     </div>
-    <div class="uv-barra-fondo">
-        <div id="uv-progreso" class="uv-barra-color" style="width: 0%"></div>
-    </div>
-    <div id="uv-consejo" class="uv-status">Cargando datos...</div>
+    
+    <p id="uv-consejo" style="font-size: 13px; color: #666; font-style: italic;">Cargando datos...</p>
 </div>
 
 <div style="background: rgba(0,0,0,0.7); color: white; padding: 15px; border-radius: 15px; border: 1px solid #2ecc71; text-align: center; max-width: 300px; margin: 20px auto;">
@@ -894,62 +894,60 @@ if(document.getElementById('fecha-zuniga')) {
 async function actualizarUV() {
     const valorTxt = document.getElementById('uv-valor');
     const barra = document.getElementById('uv-progreso');
-    const consejo = document.getElementById('uv-consejo');
 
-    const ahora = new Date();
-    const horaActual = ahora.getHours();
+    // USAMOS TU LLAVE DIRECTAMENTE ACÁ PARA QUE NO FALLE
+    // (Asegurate que estos números sean los de tu WeatherAPI)
+    const MI_LLAVE = "7a3c696b0a174cbd8fd174435261004"; 
 
     try {
-        // Usamos WeatherAPI que es la que ya tenés funcionando (usando tu API_KEY)
-        // Pedimos el clima actual de San Martín, Mendoza
-        const res = await fetch(`https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=-33.0811,-68.4681&lang=es`);
+        const res = await fetch(`https://api.weatherapi.com/v1/current.json?key=${MI_LLAVE}&q=-33.0811,-68.4681&lang=es`);
         const data = await res.json();
-        
-        // Sacamos el UV actual (no el máximo del día)
-        let uv = data.current.uv;
 
-        // Regla de seguridad nocturna
-        if (horaActual >= 20 || horaActual < 8) {
-            uv = 0;
-        }
+        if (data.current) {
+            let uv = data.current.uv;
+            
+            // Regla nocturna
+            const hora = new Date().getHours();
+            if (hora >= 20 || hora < 8) uv = 0;
 
-        // Actualizamos la pantalla
-        valorTxt.innerText = uv.toFixed(1);
-        let porcentaje = (uv / 11) * 100;
-        barra.style.width = Math.min(porcentaje, 100) + "%";
+            // ¡Acá ocurre la magia!
+            valorTxt.innerHTML = uv.toFixed(1);
 
-        // Colores y consejos
-        if (uv <= 0) {
-            barra.style.backgroundColor = "#2ecc71";
-            barra.style.width = "0%";
-            consejo.innerText = "Noche en San Martín. Sin radiación.";
-        } else if (uv <= 2) {
-            barra.style.backgroundColor = "#2ecc71"; 
-            consejo.innerText = "Riesgo bajo. Podés estar afuera.";
-        } else if (uv <= 5) {
-            barra.style.backgroundColor = "#f1c40f"; 
-            consejo.innerText = "Riesgo moderado. Usar gorra.";
-        } else if (uv <= 7) {
-            barra.style.backgroundColor = "#e67e22"; 
-            consejo.innerText = "Riesgo alto. Usar protector solar.";
+// Buscamos el elemento del consejo
+const consejo = document.getElementById('uv-consejo');
+
+// Si el consejo existe, le cambiamos el texto según el UV
+if (consejo) {
+    if (uv <= 2.9) {
+        consejo.innerText = "Riesgo bajo. Podés estar afuera.";
+    } else if (uv <= 5.9) {
+        consejo.innerText = "Riesgo moderado. Usá gorra.";
+    } else {
+        consejo.innerText = "Riesgo alto. ¡Usa protector solar!";
+    }
+}
+            
+            if (barra) {
+                let porc = (uv / 11) * 100;
+                barra.style.width = Math.min(porc, 100) + "%";
+                // Color según riesgo
+                if (uv <= 2) barra.style.backgroundColor = "#2ecc71";
+                else if (uv <= 5) barra.style.backgroundColor = "#f1c40f";
+                else barra.style.backgroundColor = "#e67e22";
+            }
         } else {
-            barra.style.backgroundColor = "#e74c3c"; 
-            consejo.innerText = "¡Cuidado! Buscá la sombra.";
+            valorTxt.innerText = "Error Datos";
         }
 
-    } catch (e) {
-        console.log("Error UV:", e);
-        if (horaActual >= 20 || horaActual < 8) {
-            valorTxt.innerText = "0.0";
-            barra.style.width = "0%";
-        }
+    } catch (error) {
+        // Si sale esto, es porque no hay internet o el link está mal escrito
+        valorTxt.innerText = "Sin Conexión";
+        console.log(error);
     }
 }
 
-// Ejecutamos
 actualizarUV();
-
-</script></script>
+</script>
 
 </div>
 </div>
