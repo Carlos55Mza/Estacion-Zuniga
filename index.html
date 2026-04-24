@@ -89,21 +89,6 @@ function ponerFechaActual() {
 // Ejecutar al cargar
 ponerFechaActual();
 
-/* Animación base */
-@keyframes rotarMolino {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-#molino-imagen {
-    width: 50px; /* Ajustalo a tu gusto */
-    height: auto;
-    display: inline-block;
-    vertical-align: middle;
-    /* Por defecto empieza quieto */
-    animation: rotarMolino 0s linear infinite; 
-}
-
 /* ARREGLO PARA QUE NO SE MONTEN LOS DEPARTAMENTOS */
 @media (max-width: 480px) {
     .city-selector {
@@ -421,7 +406,79 @@ vertical-align: middle;
     font-style: italic;
 }
 
+
+<style>
+.aire-contenedor-fijo {
+    background: rgba(0, 0, 0, 0.75); /* Fondo oscuro sólido */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 20px;
+    width: 280px;
+    margin: 20px auto;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.aire-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 8px;
+}
+
+.aire-titulo {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #00ebff;
+    letter-spacing: 1px;
+}
+
+.aire-info-principal {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.aire-grande {
+    font-size: 4rem; /* ¡Bien grande como querías! */
+    font-weight: 900;
+    line-height: 1;
+}
+
+.aire-texto-grupo {
+    display: flex;
+    flex-direction: column;
+}
+
+.aire-status {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.aire-sub {
+    font-size: 0.7rem;
+    opacity: 0.7;
+}
+
+.aire-progreso-bar {
+    width: 100%;
+    height: 10px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.aire-barrita {
+    height: 100%;
+    width: 0%;
+    transition: width 1s ease, background 0.5s;
+}
 </style>
+
 </head>
 <body>
     
@@ -438,7 +495,7 @@ vertical-align: middle;
                 ALERTA
             </div>
                 <marquee scrollamount="3" style="color: #fff; font-family: Arial; font-size: 0.9rem; font-weight: bold;">
-    🏔️ ——— 🍃 AIRE: BUENO (ICA 35) ——— 🌪️ DOMINGO 26 DE ABRIL, VIENTO EXTREMADAMENTE FUERTE EN TODA LA COSTA ESTE DE ARGENTINA Y URUGUAY - PRECAUCUÓN🏠 ESTACIÓN ZÚÑIGA: INFORMACIÓN EN TIEMPO REAL
+    🏔️ ———  🌪️ DOMINGO 26 DE ABRIL, VIENTO EXTREMADAMENTE FUERTE EN TODA LA COSTA ESTE DE ARGENTINA Y URUGUAY - PRECAUCUÓN🏠 ESTACIÓN ZÚÑIGA: INFORMACIÓN EN TIEMPO REAL
 </marquee>
             </marquee>
         </div>
@@ -455,16 +512,29 @@ vertical-align: middle;
                 <div id="date" style="display: none;">--</div>
 <div class="indicadores-viento">
     
-    <div class="seccion-molino">
-        <img id="molino-imagen" src="molino.gif" alt="Molino de viento">
+    <div id="contenedor-molino" style="
+    background-color: rgba(0, 0, 0, 0.8); 
+    border: 2px solid #00ebff; 
+    border-radius: 20px; 
+    padding: 15px; 
+    width: 200px; 
+    margin: 20px auto; 
+    color: white; 
+    text-align: center; 
+    font-family: Arial, sans-serif;">
+
+    <img id="molino-imagen" src="molino.gif" alt="Molino" style="width: 80px; height: auto; margin-bottom: 10px;">
+
+    <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px;">
+        <div id="viento-velocidad" style="font-size: 18px; font-weight: bold; color: #ffff00;">0 km/h</div>
+        <div id="viento-leyenda" style="font-size: 12px; opacity: 0.8; text-transform: uppercase;">Calma</div>
     </div>
+</div>
 
     
 </div>
 </div>
-
- 
-           
+          
             <div class="weather-main-card">
                 <div class="city-selector">
                     <select id="select-clima" onchange="updateWeatherLocation(this.value)">
@@ -580,13 +650,35 @@ vertical-align: middle;
     <p id="uv-consejo" style="font-size: 13px; color: #666; font-style: italic;">Cargando datos...</p>
 </div>
 
-<div style="background: rgba(0,0,0,0.7); color: white; padding: 15px; border-radius: 15px; border: 1px solid #2ecc71; text-align: center; max-width: 300px; margin: 20px auto;">
-    <span style="font-size: 0.8rem; text-transform: uppercase; color: #2ecc71;">Calidad del Aire</span>
-    <div style="font-size: 1.2rem; font-weight: bold; margin: 5px 0;">🍃 BUENA (ICA 35)</div>
-    <div style="height: 10px; background: linear-gradient(to right, #2ecc71, #f1c40f, #e67e22, #e74c3c); border-radius: 5px;"></div>
-    <p style="font-size: 0.7rem; color: #aaa; margin-top: 8px;">Condiciones óptimas para actividades al aire libre en San Martín.</p>
-</div>
+<div id="contenedor-aire" style="
+    background-color: rgba(0, 0, 0, 0.8) !important; 
+    border: 2px solid #00ebff; 
+    border-radius: 20px; 
+    padding: 20px; 
+    width: 280px; 
+    margin: 20px auto; 
+    color: white; 
+    text-align: center; 
+    box-shadow: 0px 10px 30px rgba(0,0,0,1);
+    font-family: Arial, sans-serif;">
 
+    <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
+        <span style="font-size: 20px;">🍃</span>
+        <span style="font-size: 16px; font-weight: bold; color: #00ebff; letter-spacing: 1px;">ESTADO DEL AIRE</span>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin: 15px 0;">
+        <span id="aire-valor" style="font-size: 80px; font-weight: 900; line-height: 1;">--</span>
+        <div style="text-align: left;">
+            <div id="aire-estado" style="font-size: 20px; font-weight: bold; color: #00ff00;">Cargando...</div>
+            <div style="font-size: 12px; opacity: 0.7;">PM2.5 (San Martín)</div>
+        </div>
+    </div>
+
+    <div style="width: 100%; height: 12px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden;">
+        <div id="aire-progreso" style="height: 100%; width: 0%; background: #00ff00; transition: width 1s;"></div>
+    </div>
+</div>
     <div style="display: flex; flex-direction: column; gap: 6px;">
         
         <div class="dolar-mini-box">
@@ -1190,30 +1282,37 @@ async function updateWeatherLocation(val) {
             else icon.innerText = 'umbrella';
 
             // 3. LÓGICA DE LOS GIFS (MOLINO Y HOJAS)
-            // Usamos try/catch interno para que si falla el GIF, NO se rompa la temperatura
-            try {
-                const viento = data.current.wind_kph;
-                const molino = document.getElementById('molino-imagen');
-                const vientoHojas = document.getElementById('viento-imagen');
+            // 1. Primero, atrapamos los elementos por su ID
+const elVientoVelocidad = document.getElementById('viento-velocidad');
+const elVientoLeyenda = document.getElementById('viento-leyenda');
 
-                if (molino && vientoHojas) {
-                    if (viento < 5) {
-                        // CALMA: Los ocultamos o podrías poner una imagen quieta
-                        molino.style.display = 'none';
-                        vientoHojas.style.display = 'none';
-                    } else if (viento < 30) {
-                        // BRISA: Mostramos el molino normal
-                        molino.style.display = 'inline-block';
-                        vientoHojas.style.display = 'none'; // Solo el molino para no amontonar
-                    } else {
-                        // VIENTO FUERTE: Mostramos ambos y podrías ponerle un borde rojo
-                        molino.style.display = 'inline-block';
-                        vientoHojas.style.display = 'inline-block';
-                    }
-                }
-            } catch (errGif) {
-                console.log("Error en los gráficos de viento", errGif);
-            }
+// 2. Ahora, si la API nos dio datos, los ponemos en pantalla
+if (data && data.current) {
+    // Tomamos la velocidad y la redondeamos para que no tenga decimales feos
+    const vto = Math.round(data.current.wind_kph); 
+    
+    // Mostramos el número en la cajita
+    if (elVientoVelocidad) {
+        elVientoVelocidad.innerText = vto + " km/h";
+    }
+
+    // 3. Cambiamos la leyenda según la fuerza del viento
+    if (elVientoLeyenda) {
+        if (vto < 5) {
+            elVientoLeyenda.innerText = "Aire calmo";
+            elVientoLeyenda.style.color = "#00ebff"; // Celeste
+        } else if (vto <= 25) {
+            elVientoLeyenda.innerText = "Brisa suave";
+            elVientoLeyenda.style.color = "#00ff00"; // Verde
+        } else if (vto <= 45) {
+            elVientoLeyenda.innerText = "Viento fuerte";
+            elVientoLeyenda.style.color = "#ffff00"; // Amarillo
+        } else {
+            elVientoLeyenda.innerText = "¡Alerta Zonda!";
+            elVientoLeyenda.style.color = "#ff0000"; // Rojo
+        }
+    }
+}
 
             // 4. PRONÓSTICO EXTENDIDO
             if (data.forecast) {
@@ -1795,23 +1894,50 @@ async function actualizarTodoElClima() {
 // Llamamos a la función
 actualizarTodoElClima();
 
-// --- CONTROL DEL MOLINO ÚNICO ---
-const molino = document.getElementById('molino-imagen');
-const viento = data.current.wind_kph;
+</script>
 
-if (molino) {
-    if (viento < 5) {
-        // CALMA: El molino se queda quieto
-        molino.style.animationDuration = '0s';
-    } else if (viento <= 30) {
-        // HASTA 30 km/h: Movimiento tranquilo (una vuelta cada 4 segundos)
-        molino.style.animationDuration = '4s';
+<script>
+async function actualizarAire() {
+    const API_KEY = "7a3c696b0a174cbd8fd174435261004"; // <-- Poné tu llave aquí
+    const URL = `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=-33.0811,-68.4681&aqi=yes&lang=es`;
+
+    try {
+        const respuesta = await fetch(URL);
+        const data = await respuesta.json();
+
+        if (data.current && data.current.air_quality) {
+            const pm25 = Math.round(data.current.air_quality.pm2_5);
+            const elValor = document.getElementById('aire-valor');
+            const elEstado = document.getElementById('aire-estado');
+            const laBarra = document.getElementById('aire-progreso');
+
+            elValor.innerText = pm25;
+
+            // Lógica de colores y estados (según estándares de salud)
+            if (pm25 <= 12) {
+        elEstado.innerText = "EXCELENTE";
+        elEstado.style.color = "#00ff00";
+        laBarra.style.backgroundColor = "#00ff00";
+        laBarra.style.width = "35%";
+    } else if (pm25 <= 35) {
+        elEstado.innerText = "MODERADO";
+        elEstado.style.color = "#ffff00";
+        laBarra.style.backgroundColor = "#ffff00";
+        laBarra.style.width = "65%";
     } else {
-        // MÁS DE 30 km/h (ZONDA): ¡A las chapas! (una vuelta por segundo)
-        molino.style.animationDuration = '1s';
+        elEstado.innerText = "ALERTA";
+        elEstado.style.color = "#ff0000";
+        laBarra.style.backgroundColor = "#ff0000";
+        laBarra.style.width = "95%";
+    }
+}
+    } catch (error) {
+        console.error("Error cargando aire:", error);
     }
 }
 
+// Arranca al cargar la página
+actualizarAire();
 </script>
 
 <script>
