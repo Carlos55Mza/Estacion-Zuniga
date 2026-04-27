@@ -269,26 +269,78 @@ ponerFechaActual();
         margin-bottom: 10px; margin-left: 5px; margin-top: -3px;
 vertical-align: middle;
     }
-.vuelos-mini-box {
-    background: #f0f4f8; 
-    border: 2px solid #2980b9; 
-    color: #2980b9; 
-    padding: 5px 12px; 
-    border-radius: 10px; 
-    font-weight: 800; 
-    display: inline-flex; 
-    align-items: center; 
-    gap: 8px; 
-    font-size: 0.9rem;
-    text-decoration: none;
-    transition: 0.3s;
-}
+.boton-plumerillo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        
+        /* Fondo efecto fibra de carbono/metal oscuro */
+        background: radial-gradient(circle at center, #34495e 0%, #2c3e50 100%);
+        
+        /* Borde dorado estilo Panel de la Suerte */
+        border: 2px solid #f1c40f;
+        
+        color: white;
+        padding: 15px 20px;
+        border-radius: 15px;
+        font-family: 'Arial Black', Gadget, sans-serif;
+        font-weight: bold;
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        
+        /* Sombras para dar profundidad */
+        box-shadow: 0 8px 15px rgba(0,0,0,0.4), inset 0 2px 3px rgba(255,255,255,0.1);
+        
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
 
-.vuelos-mini-box:hover {
-    background: #2980b9;
-    color: white;
-}
+    /* Efecto de brillo que pasa rápido */
+    .boton-plumerillo::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(to bottom right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
+        transform: rotate(45deg);
+        transition: all 0.5s;
+    }
 
+    /* Pequeño subtítulo abajo del nombre */
+    .boton-plumerillo .subtitulo {
+        font-size: 0.7rem;
+        font-weight: normal;
+        color: #ced4da;
+        margin-top: 3px;
+        font-family: Arial, sans-serif;
+    }
+
+    .boton-plumerillo .icono-avion {
+        font-size: 1.6rem;
+        margin-bottom: 5px;
+    }
+
+    /* Efectos al pasar el dedo o mouse (Hover) */
+    .boton-plumerillo:hover {
+        transform: translateY(-3px); /* Levanta un poquito */
+        box-shadow: 0 12px 20px rgba(0,0,0,0.5);
+        border-color: #fff; /* El borde se vuelve blanco */
+    }
+
+    .boton-plumerillo:hover::after {
+        left: 100%;
+        top: 100%;
+    }
+    
+    .boton-plumerillo:active {
+        transform: translateY(1px); /* Efecto de hundido al apretar */
+        box-shadow: 0 5px 10px rgba(0,0,0,0.4);
+    }
 .sismo-global-container {
     background: #1a1a1a; /* Fondo oscuro tipo monitor de control */
     color: #ffffff;
@@ -686,10 +738,13 @@ vertical-align: middle;
     <span style="margin-left: 5px;">EURO: <span id="euro-val">...</span></span>
 </div>
 
-        <a href="https://www.aa2000.com.ar/mendoza" target="_blank" class="vuelos-mini-box" style="width: fit-content; margin: 0; text-decoration: none;">
-            <span>✈️</span>
-            <span style="margin-left: 5px;">EL PLUMERILLO</span>
-        </a>
+  <div style="text-align: center; margin: 30px auto; max-width: 300px; clear: both;">
+    <a href="https://www.aa2000.com.ar/mendoza" target="_blank" class="boton-plumerillo">
+        <span class="icono-avion">✈️</span>
+        EL PLUMERILLO
+        <span class="subtitulo">Vuelos en Vivo</span>
+    </a>
+</div>
     </div>
 <div class="seccion-columna" style="display: block; width: 350px; float: left; clear: left; margin: 10px;">
     
@@ -954,7 +1009,6 @@ vertical-align: middle;
 
 </div>
 </div>   
-
 <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin: 25px 0;">
     
     <a href="calendario.html" style="text-decoration: none; background: #007bff; color: white; padding: 15px 30px; border-radius: 50px; font-weight: bold; font-size: 1.1rem; box-shadow: 0 5px 15px rgba(0,0,0,0.2); width: 200px; text-align: center;">
