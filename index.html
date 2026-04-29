@@ -511,9 +511,9 @@ vertical-align: middle;
     transition: width 1s ease, background 0.5s;
 }
 </style>
-
 </head>
 <body>
+
 <div style="clear: both; display: block; position: relative; z-index: 10000; background: #000; border: 2px solid #3498db; border-radius: 15px; padding: 15px; max-width: 380px; margin: 20px auto; text-align: center; font-family: Arial, sans-serif !important;">
     
     <label style="color: #3498db; display: block; margin-bottom: 10px; font-weight: bold; text-transform: uppercase; font-size: 0.8rem;">Consultar Clima Nacional</label>
@@ -1129,6 +1129,8 @@ window.climaZuniga = function() {
    	
 </div>
 </div>   
+
+
 <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin: 25px 0;">
     
     <a href="calendario.html" style="text-decoration: none; background: #007bff; color: white; padding: 15px 30px; border-radius: 50px; font-weight: bold; font-size: 1.1rem; box-shadow: 0 5px 15px rgba(0,0,0,0.2); width: 200px; text-align: center;">
@@ -1266,7 +1268,34 @@ if (consejo) {
 
 actualizarUV();
 </script>
+<script>
+const form = document.getElementById("form-sugerencias");
+const status = document.getElementById("status-envio");
 
+form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    
+    status.style.display = "block";
+    status.innerText = "Enviando...";
+    status.style.color = "#f1c40f";
+
+    fetch(event.target.action, {
+        method: form.method,
+        body: data,
+        headers: { 'Accept': 'application/json' }
+    }).then(response => {
+        if (response.ok) {
+            status.innerText = "¡Gracias! Recibimos tu sugerencia.";
+            status.style.color = "#00ff00";
+            form.reset();
+        } else {
+            status.innerText = "Ups! Hubo un error al enviar.";
+            status.style.color = "#ff0000";
+        }
+    });
+});
+</script>
 <script>
 // Solicitar permiso para las notificaciones "Plan B"
 function solicitarPermisoNotificaciones() {
@@ -2336,6 +2365,27 @@ setInterval(actualizarReloj, 1000);
         border: 1px solid #d35400;
     }
 </style>
+
+
+<div style="background: rgba(0, 0, 0, 0.3); border: 1px solid #444; padding: 15px; border-radius: 12px; margin: 20px 10px; font-family: sans-serif;">
+    <h3 style="color: #fbc02d; font-size: 1rem; margin: 0 0 10px 0; display: flex; align-items: center; gap: 8px;">
+        <span class="material-symbols-outlined" style="font-size: 20px;">mail</span>
+        Sugerencias para Estación Zúñiga
+    </h3>
+    
+    <form id="form-sugerencias" action="https://formspree.io/f/mnjwabaj" method="POST">
+        <textarea 
+            name="mensaje" 
+            placeholder="¿Qué te gustaría agregar o mejorar?..." 
+            required
+            style="width: 100%; height: 70px; background: #1a1a1a; color: #fff; border: 1px solid #555; border-radius: 8px; padding: 10px; font-size: 0.9rem; resize: none; box-sizing: border-box; outline: none;"></textarea>
+        
+        <button type="submit" style="width: 100%; background: #007bff; color: white; border: none; padding: 12px; border-radius: 8px; margin-top: 10px; cursor: pointer; font-weight: bold; font-size: 0.9rem; transition: 0.3s;">
+            Enviar Mensaje
+        </button>
+    </form>
+    <div id="status-envio" style="margin-top: 10px; font-size: 0.8rem; text-align: center; display: none;"></div>
+</div>
 
 </div></div></div>
 <footer style="width: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); color: white; text-align: center; padding: 15px 0; margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.2);">
