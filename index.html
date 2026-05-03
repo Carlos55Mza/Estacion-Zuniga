@@ -2425,6 +2425,51 @@ setInterval(actualizarReloj, 1000);
 </div>
 </div>
 
+<!-- Botón Flotante de Cocina -->
+<style>
+    .boton-cocina-flotante {
+        position: fixed;
+        right: 0; /* Lo pone en la orilla derecha */
+        top: 50%; /* Lo centra verticalmente */
+        transform: translateY(-50%);
+        background-color: #ff6b6b; /* Un color naranja-rojizo que evite el hambre */
+        color: white;
+        padding: 15px 10px;
+        border-radius: 15px 0 0 15px; /* Redondeado solo del lado izquierdo */
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: -2px 0px 10px rgba(0,0,0,0.2);
+        z-index: 9999;
+        transition: 0.3s;
+    }
+
+    .boton-cocina-flotante:hover {
+        padding-right: 20px;
+        background-color: #ff5252;
+    }
+
+    .boton-cocina-flotante img {
+        width: 30px;
+        height: 30px;
+        margin-bottom: 5px;
+    }
+
+    .boton-cocina-flotante span {
+        writing-mode: vertical-rl; /* Pone el texto en vertical para que ocupe menos espacio */
+        text-transform: uppercase;
+        font-weight: bold;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+</style>
+
+<a href="https://quetienesparacocinar.lovable.app/" target="_blank" class="boton-cocina-flotante">
+    <img src="https://cdn-icons-png.flaticon.com/512/1046/1046747.png" alt="Cocina">
+    <span>¿Qué cocino?</span>
+</a>
+
 <div style="background: linear-gradient(145deg, #1e3799, #0c2461); border: 2px solid #f1c40f; border-radius: 15px; padding: 15px; color: white; max-width: 350px; margin: 20px auto; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); clear: both;">
     
     <div style="color: #f1c40f; font-weight: bold; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">
