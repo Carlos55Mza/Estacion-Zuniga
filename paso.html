@@ -12,99 +12,87 @@
             font-family: 'Segoe UI', sans-serif;
             margin: 0;
             padding: 20px;
-            text-align: center;
-            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
         }
+
+        /* Caja contenedora nítida y profesional */
         .caja-paso {
-            max-width: 500px;
-            width: 100%;
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            border-radius: 24px;
+            background: #1a222b; /* Fondo sólido para evitar el desenfoque no deseado */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px; /* Bordes redondeados sutiles */
             padding: 25px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Sombra nítida */
             box-sizing: border-box;
         }
-        .btn-volver {
+
+        /* Estilo para el botón de acción principal */
+        .btn-accion-verde {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 25px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+            justify-content: center;
+            gap: 10px;
+            background: #2ecc71; /* Color verde vibrante */
             color: white;
             text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 10px;
+            padding: 14px 25px;
+            border-radius: 12px; /* Bordes redondeados nítidos */
             font-weight: bold;
-            font-size: 0.85rem;
-            transition: background 0.2s;
+            font-size: 1.1rem;
+            transition: background 0.2s, transform 0.1s;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 25px;
+            margin-bottom: 20px;
         }
-        .btn-volver:hover { background: rgba(255,255,255,0.2); }
+
+        .btn-accion-verde:hover {
+            background: #27ae60;
+            transform: translateY(-1px);
+        }
+
+        /* Estilo para el enlace de "Volver" */
+        .enlace-volver {
+            color: #8a99a6;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .enlace-volver:hover {
+            color: white;
+        }
     </style>
 </head>
 <body>
 
     <div class="caja-paso">
-        <h2 style="margin-top:0; font-size: 1.3rem; letter-spacing: 1px; color: #ced4da;">🏔️ REPORTE ALTA MONTAÑA</h2>
-        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.15); margin-bottom: 20px;">
+        <h2 style="margin-top:0; font-size: 1.4rem; color: #ced4da; margin-bottom: 25px;">
+            <span style="vertical-align: middle;">🏔️</span> REPORTE ALTA MONTAÑA
+        </h2>
+        
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.08); margin-bottom: 25px;">
 
-        <div style="display: flex; align-items: center; justify-content: space-around; margin: 20px 0;">
-            <span id="paso-icono" class="material-symbols-outlined" style="font-size: 45px; color: #2ecc71;">sync</span>
-            <div style="text-align: left; flex: 1; padding-left: 15px;">
-                <div id="paso-estado" style="font-size: 1.3rem; font-weight: 900; color: #2ecc71; text-transform: uppercase;">Sincronizando...</div>
-                <div id="paso-detalle" style="font-size: 0.85rem; color: #ced4da; margin-top: 4px;">Leyendo sensores en Cristo Redentor...</div>
-            </div>
+        <div style="margin: 35px 0;">
+            <span class="material-symbols-outlined" style="font-size: 55px; color: #74b9ff;">info</span>
+            <p style="color: #ced4da; line-height: 1.6; margin-top: 15px;">
+                Para consultar el estado oficial en tiempo real del <b>Sistema Cristo Redentor</b>, hacé clic en el botón de abajo.
+            </p>
         </div>
 
-        <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 14px; margin-top: 20px; display: flex; justify-content: space-around; text-align: center;">
-            <div>
-                <div style="font-size: 0.7rem; color: #8a99a6; font-weight: bold; text-transform: uppercase;">Temperatura</div>
-                <div id="paso-temp" style="font-size: 1.4rem; font-weight: 900; color: #74b9ff; margin-top: 2px;">--°C</div>
-            </div>
-            <div style="border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px;">
-                <div style="font-size: 0.7rem; color: #8a99a6; font-weight: bold; text-transform: uppercase;">Zona Límite</div>
-                <div style="font-size: 0.9rem; font-weight: bold; color: white; margin-top: 6px;">Las Cuevas</div>
-            </div>
-        </div>
-
-        <a href="index.html" class="btn-volver">
-            <span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span> Volver a la Estación
+        <a href="https://www.argentina.gob.ar/seguridad/pasosinternacionales/detalle/ruta/29/Sistema-Cristo-Redentor" target="_blank" class="btn-accion-verde">
+            <span class="material-symbols-outlined">open_in_new</span> Ver Estado Oficial (PasAr)
         </a>
+
+        <a href="index.html" class="enlace-volver">Volver a la Estación</a>
     </div>
-
-<script>
-    async function consultarPasoFronterizoReal() {
-        const estadoElem = document.getElementById('paso-estado');
-        const detalleElem = document.getElementById('paso-detalle');
-
-        // Usamos una API alternativa de datos abiertos para evitar bloqueos
-        // En este caso, simulamos la respuesta para asegurar que el diseño funcione
-        try {
-            // Nota: Si esto falla, el servidor desde donde hosteas la página 
-            // está bloqueando peticiones externas.
-            const response = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.argentina.gob.ar/seguridad/pasosinternacionales/detalle/ruta/29/Sistema-Cristo-Redentor'));
-            
-            if (!response.ok) throw new Error('Network response was not ok');
-            
-            estadoElem.innerText = "HABILITADO (PRECAUCIÓN) 🟢";
-            detalleElem.innerText = "Estado reportado con normalidad.";
-            estadoElem.style.color = "#2ecc71";
-            
-        } catch (error) {
-            console.error('Error:', error);
-            estadoElem.innerText = "SERVICIO EN PAUSA";
-            detalleElem.innerText = "Temporalmente no se puede conectar al servidor oficial.";
-            estadoElem.style.color = "#f1c40f";
-        }
-    }
-    
-    window.onload = consultarPasoFronterizoReal;
-</script>
 
 </body>
 </html>

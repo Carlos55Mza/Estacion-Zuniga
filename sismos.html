@@ -23,43 +23,23 @@
             border: 2px solid rgba(231, 76, 60, 0.3);
             border-radius: 24px;
             padding: 25px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px);
+            background: #1a222b;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-            box-sizing: border-box;
             text-align: center;
         }
-        .lista-reportes {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        /* Contenedor del reporte oficial */
+        .contenedor-inpres {
+            width: 100%;
+            height: 350px;
+            border-radius: 15px;
+            overflow: hidden;
             margin: 20px 0;
-        }
-        .bloque-sismo {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 14px;
-            padding: 12px 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: left;
-        }
-        .circulo-magnitud {
-            min-width: 50px;
-            height: 50px;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            font-weight: 900;
+            background: white; /* El fondo del iframe es blanco */
         }
         .btn-volver {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            margin-top: 10px;
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
             color: white;
@@ -68,160 +48,27 @@
             border-radius: 10px;
             font-weight: bold;
             font-size: 0.85rem;
-            transition: background 0.2s;
+            margin-top: 10px;
         }
-        .btn-volver:hover { background: rgba(255,255,255,0.2); }
     </style>
 </head>
 <body>
 
     <div class="caja-sismos">
-        <h2 style="margin-top:0; font-size: 1.3rem; letter-spacing: 1px; color: #e74c3c; display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <span class="material-symbols-outlined" style="font-size: 28px;">sensors</span> RADAR SÍSMICO EN VIVO
+        <h2 style="margin-top:0; font-size: 1.3rem; color: #e74c3c; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span class="material-symbols-outlined">sensors</span> RADAR SÍSMICO EN VIVO
         </h2>
-        <div style="font-size: 0.75rem; color: #a0a0a0; font-weight: bold; letter-spacing: 0.5px;">MONITOREO DE ACTIVIDAD GEOLÓGICA REGIONAL e INT.</div>
-        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.15); margin: 15px 0;">
-
-        <div class="lista-reportes" id="panel-sismos-usgs">
-            </div>
-
-        <div style="font-size: 0.7rem; color: #8a99a6; font-style: italic; margin-bottom: 15px;" id="sismo-time">
-            Sincronizando balizas sísmicas...
-        </div>
+        <div style="font-size: 0.75rem; color: #a0a0a0;">MONITOREO OFICIAL (INPRES)</div>
+        
+        <a href="https://www.inpres.gob.ar/desktop/" target="_blank" 
+           class="btn-volver" style="background: #e74c3c; color: white; width: 100%; justify-content: center; padding: 15px; margin-top: 20px;">
+            <span class="material-symbols-outlined">open_in_new</span> Ver Reporte Oficial (INPRES)
+        </a>
 
         <a href="index.html" class="btn-volver">
-            <span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span> Volver a la Estación
+            <span class="material-symbols-outlined">arrow_back</span> Volver a la Estación
         </a>
     </div>
-
-   <script>
-        // Formateador criollo para pasar de hora de 24h a 12h con AM/PM y poner fecha prolija
-        function formatearFechaCriolla(fechaObjeto) {
-            const meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
-            
-            const dia = fechaObjeto.getDate();
-            const mes = meses[fechaObjeto.getMonth()];
-            
-            let horas = fechaObjeto.getHours();
-            const minutos = fechaObjeto.getMinutes().toString().padStart(2, '0');
-            const ampm = horas >= 12 ? 'PM' : 'AM';
-            
-            horas = horas % 12;
-            horas = horas ? horas : 12; // El 0 pasa a ser las 12
-            
-            const hoy = new Date();
-            let etiquetaDia = `${dia} de ${mes}`;
-            if (fechaObjeto.toDateString() === hoy.toDateString()) {
-                etiquetaDia = "Hoy";
-            } else {
-                const ayer = new Date();
-                ayer.setDate(hoy.getDate() - 1);
-                if (fechaObjeto.toDateString() === ayer.toDateString()) {
-                    etiquetaDia = "Ayer";
-                }
-            }
-            
-            return `${etiquetaDia} a las ${horas}:${minutos} ${ampm}`;
-        }
-
-        function armarTablaSismica(listaSismos) {
-            const panel = document.getElementById('panel-sismos-usgs');
-            let HTML = "";
-            
-            listaSismos.forEach(s => {
-                let colCirculo = "rgba(241, 196, 15, 0.15)";
-                let colBorde = "rgba(241, 196, 15, 0.4)";
-                let colTexto = "#f1c40f";
-                let iconoChoque = "💥";
-
-                if (s.mag >= 4.5) {
-                    colCirculo = "rgba(231, 76, 60, 0.2)";
-                    colBorde = "rgba(231, 76, 60, 0.5)";
-                    colTexto = "#ff7675";
-                    iconoChoque = "⚠️";
-                }
-
-                HTML += `
-                    <div class="bloque-sismo">
-                        <div style="display:flex; align-items:center; gap:12px; width:85%;">
-                            <div class="circulo-magnitud" style="background:${colCirculo}; border-color:${colBorde}; color:${colTexto};">
-                                ${s.mag.toFixed(1)}
-                            </div>
-                            <div style="overflow:hidden;">
-                                <div style="font-size:0.9rem; font-weight:900; color:#fff; text-overflow:ellipsis; overflow:hidden;">${s.lugar}</div>
-                                <div style="font-size:0.75rem; color:#ced4da; margin-top:2px;">${s.fechaTexto}</div>
-                            </div>
-                        </div>
-                        <span style="font-size: 20px;">${iconoChoque}</span>
-                    </div>
-                `;
-            });
-            
-            panel.innerHTML = HTML;
-        }
-
-        async function ejecutarSismógrafo() {
-            const timeElement = document.getElementById('sismo-time');
-            const ahora = new Date();
-
-            try {
-                // Usamos un proxy limpio y apuntamos al feed global pero filtrado para nuestra región
-                const urlSismos = "https://api.codetabs.com/v1/proxy/?url=" + encodeURIComponent("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson?v=" + new Date().getTime());
-                
-                const res = await fetch(urlSismos);
-                const data = await res.json();
-
-                if (data && data.features) {
-                    // Filtramos EN VIVO los sismos que pasaron cerca de nuestra zona (Latitud entre -40 y -20, Longitud entre -75 y -65)
-                    // Esto agarra Mendoza, San Juan, San Luis y el límite con Chile de lleno.
-                    const sismosLocales = data.features
-                        .filter(f => {
-                            const coords = f.geometry.coordinates;
-                            const lon = coords[0];
-                            const lat = coords[1];
-                            return lat >= -40 && lat <= -20 && lon >= -75 && lon <= -65;
-                        })
-                        .slice(0, 5) // Nos quedamos con los 5 más recientes
-                        .map(sismo => {
-                            const fechaS = new Date(sismo.properties.time);
-                            let lugarTraducido = sismo.properties.place
-                                .replace("of", "de")
-                                .replace("region", "región")
-                                .replace("Argentina", "ARGENTINA 🇦🇷")
-                                .replace("Chile", "CHILE 🇨🇱");
-                            
-                            return {
-                                mag: sismo.properties.mag,
-                                lugar: lugarTraducido,
-                                fechaTexto: formatearFechaCriolla(fechaS)
-                            };
-                        });
-
-                    if (sismosLocales.length > 0) {
-                        armarTablaSismica(sismosLocales);
-                        timeElement.innerText = `Red Sísmica Cono Sur sincronizada a las ${formatearFechaCriolla(ahora)}.`;
-                        return;
-                    }
-                }
-            } catch (e) {
-                console.log("Error en la conexión satelital.", e);
-            }
-
-            // RESPALDO LOCAL SI LA RED DA ERROR
-            const deRespaldo = [
-                { mag: 3.2, lugar: "Mendoza, ARGENTINA 🇦🇷 (Zona Norte)", fechaTexto: "Hoy a las 2:15 PM" },
-                { mag: 4.1, lugar: "Coquimbo, CHILE 🇨🇱 (Cordillera)", fechaTexto: "Hoy a las 11:42 AM" },
-                { mag: 2.9, lugar: "San Juan, ARGENTINA 🇦🇷 (Cerca de Caucete)", fechaTexto: "Hoy a las 8:05 AM" },
-                { mag: 3.5, lugar: "Valparaíso, CHILE 🇨🇱", fechaTexto: "Ayer a las 9:22 PM" },
-                { mag: 3.0, lugar: "Mendoza, ARGENTINA 🇦🇷 (Valle de Uco)", fechaTexto: "Ayer a las 6:51 PM" }
-            ];
-
-            armarTablaSismica(deRespaldo);
-            timeElement.innerText = `Estación Geológica Mendoza (Respaldo) activa a las ${formatearFechaCriolla(ahora)}.`;
-        }
-
-        window.onload = ejecutarSismógrafo;
-    </script>
 
 </body>
 </html>

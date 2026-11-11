@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estación Zúñiga - Central Meteorológica Federal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 20px 30px; /* Reduje el padding para ganar espacio vertical */
+            background: transparent; 
+            font-family: 'Urbanist', sans-serif;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .contenedor-placas {
+            position: relative;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .placa {
+            position: absolute;
+            width: 100%;
+            max-width: 1200px; /* Un toque más compacto el ancho general */
+            background: rgba(10, 15, 20, 0.90);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.12);
+            padding: 20px 25px; /* Menos relleno interno para que no se estire */
+            border-radius: 20px;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            box-sizing: border-box;
+        }
+
+        .placa.activa {
+            display: block;
+            opacity: 1;
+        }
+
+        /* PORTADA DE BIENVENIDA COMPACTA */
+        .placa-portada {
+            background: linear-gradient(135deg, #090d12 0%, #111822 100%);
+            border: 2px solid rgba(222, 255, 154, 0.2);
+            padding: 45px 50px;
+        }
+
+        .portada-tags {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .tag-premium {
+            background: rgba(222, 255, 154, 0.1);
+            border: 1px solid #deff9a;
+            color: #deff9a;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .portada-titulo {
+            font-size: 3.8rem; /* Bajé de 4.5 a 3.8 */
+            font-weight: 900;
+            line-height: 1.1;
+            margin: 0 0 15px 0;
+            letter-spacing: -1px;
+        }
+
+        .portada-titulo span {
+            color: #deff9a;
+        }
+
+        .portada-subtitulo {
+            font-size: 1.3rem;
+            color: #daffde;
+            font-weight: 400;
+            line-height: 1.4;
+            margin: 0 0 30px 0;
+            max-width: 750px;
+        }
+
+        /* TITULOS DE LAS PLACAS OPERATIVAS (MÁS CHICOS) */
+        .titulo-placa {
+            font-size: 1.6rem; /* ¡AJUSTE CLAVE! Bajó de 2.2 a 1.6 para que entre perfecto */
+            font-weight: 900;
+            color: #f1c40f;
+            margin-top: 0;
+            margin-bottom: 18px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 2px solid rgba(241, 196, 15, 0.3);
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* GRILLA Y CUADROS MÁS PEQUEÑOS */
+        .grilla-clima {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px; /* Espacio más pegadito entre cuadros */
+        }
+
+        .tarjeta-localidad {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 12px 8px; /* Achicado el colchón interno de los cuadros */
+            border-radius: 14px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .nombre-ciudad {
+            font-size: 0.95rem; /* Un toque más chica la letra de la ciudad */
+            font-weight: 700;
+            color: #b0b0b0;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .temp-ciudad {
+            font-size: 2.3rem; /* ¡AJUSTE! Bajó de 3rem a 2.3rem para blindar el cuadro */
+            font-weight: 900;
+            color: #fff;
+            line-height: 1;
+            margin-bottom: 3px;
+        }
+
+        .cond-ciudad {
+            font-size: 0.75rem; /* Letra de estado más compacta */
+            color: #f1c40f;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* ZÓCALO INFERIOR */
+        .zocalo {
+            width: 100%;
+            max-width: 1200px;
+            margin: 10px auto 0 auto;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid rgba(241, 196, 15, 0.4);
+            padding: 12px 25px;
+            border-radius: 16px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vivo-pulso {
+            background: #e74c3c;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            animation: parpadeo 1.5s infinite;
+        }
+        @keyframes parpadeo {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        
+        .tarjeta-localidad.local { border: 2px solid #2ecc71; background: rgba(46, 204, 113, 0.05); }
+        .tarjeta-localidad.local .nombre-ciudad { color: #2ecc71; }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor-placas">
+        
+        <div class="placa placa-portada activa" id="placa-intro">
+            <div class="portada-tags">
+                <div class="tag-premium">PROYECTO: PANTALLA ROTATIVA V2.0</div>
+                <div class="tag-premium" style="border-color: #e74c3c; color: #e74c3c;">CONFIDENCIAL - USO OPERATIVO</div>
+            </div>
+            <h1 class="portada-titulo">Estación <span>Zúñiga</span><br>Strategic Outlook 2026</h1>
+            <p class="portada-subtitulo">Red de Monitoreo Meteorológico Federal e Internacional.<br>Comando Central Coordinador: San Martín, Mendoza.</p>
+            <div style="font-size: 1rem; color: #a0a0a0; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">
+                <i class="fa-solid fa-sync fa-spin" style="color: #deff9a; margin-right: 10px;"></i> Iniciando Consola de Control Federal...
+            </div>
+        </div>
+        
+        <div class="placa" id="placa-0">
+            <div class="titulo-placa"><i class="fa-solid fa-location-dot"></i> Mendoza: Regional Este, Centro y Norte</div>
+            <div class="grilla-clima">
+                <div class="tarjeta-localidad local"><div class="nombre-ciudad">San Martín</div><div class="temp-ciudad" id="hardkraft-temp">18°</div><div style="font-size:0.7rem; color:#2ecc71; font-weight:bold;">CONSOLA LOCAL</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Junín</div><div class="temp-ciudad" id="temp-junin">--°</div><div class="cond-ciudad" id="cond-junin">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Rivadavia</div><div class="temp-ciudad" id="temp-rivadavia">--°</div><div class="cond-ciudad" id="cond-rivadavia">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Santa Rosa</div><div class="temp-ciudad" id="temp-santarosa">--°</div><div class="cond-ciudad" id="cond-santarosa">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">La Paz</div><div class="temp-ciudad" id="temp-lapaz">--°</div><div class="cond-ciudad" id="cond-lapaz">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Mendoza Capital</div><div class="temp-ciudad" id="temp-mendozacap">--°</div><div class="cond-ciudad" id="cond-mendozacap">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Godoy Cruz</div><div class="temp-ciudad" id="temp-godoycruz">--°</div><div class="cond-ciudad" id="cond-godoycruz">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Guaymallén</div><div class="temp-ciudad" id="temp-guaymallen">--°</div><div class="cond-ciudad" id="cond-guaymallen">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Maipú</div><div class="temp-ciudad" id="temp-maipu">--°</div><div class="cond-ciudad" id="cond-maipu">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Las Heras</div><div class="temp-ciudad" id="temp-lasheras">--°</div><div class="cond-ciudad" id="cond-lasheras">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Luján de Cuyo</div><div class="temp-ciudad" id="temp-lujan">--°</div><div class="cond-ciudad" id="cond-lujan">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Lavalle</div><div class="temp-ciudad" id="temp-lavalle">--°</div><div class="cond-ciudad" id="cond-lavalle">Cargando</div></div>
+            </div>
+        </div>
+
+        <div class="placa" id="placa-1">
+            <div class="titulo-placa"><i class="fa-solid fa-mountain-sun"></i> Mendoza: Sur y Valle de Uco</div>
+            <div class="grilla-clima">
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">San Rafael</div><div class="temp-ciudad" id="temp-sanrafael">--°</div><div class="cond-ciudad" id="cond-sanrafael">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Malargüe</div><div class="temp-ciudad" id="temp-malargue">--°</div><div class="cond-ciudad" id="cond-malargue">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">General Alvear</div><div class="temp-ciudad" id="temp-alvear">--°</div><div class="cond-ciudad" id="cond-alvear">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Tunuyán</div><div class="temp-ciudad" id="temp-tunuyan">--°</div><div class="cond-ciudad" id="cond-tunuyan">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">San Carlos</div><div class="temp-ciudad" id="temp-sancarlos">--°</div><div class="cond-ciudad" id="cond-sancarlos">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Tupungato</div><div class="temp-ciudad" id="temp-tupungato">--°</div><div class="cond-ciudad" id="cond-tupungato">Cargando</div></div>
+            </div>
+        </div>
+
+        <div class="placa" id="placa-2">
+            <div class="titulo-placa"><i class="fa-solid fa-map"></i> Red Nacional: Norte y Centro</div>
+            <div class="grilla-clima">
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Córdoba</div><div class="temp-ciudad" id="temp-cordoba">--°</div><div class="cond-ciudad" id="cond-cordoba">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Rosario</div><div class="temp-ciudad" id="temp-rosario">--°</div><div class="cond-ciudad" id="cond-rosario">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Tucumán</div><div class="temp-ciudad" id="temp-tucuman">--°</div><div class="cond-ciudad" id="cond-tucuman">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Salta</div><div class="temp-ciudad" id="temp-salta">--°</div><div class="cond-ciudad" id="cond-salta">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Sgo. del Estero</div><div class="temp-ciudad" id="temp-santiagoest">--°</div><div class="cond-ciudad" id="cond-santiagoest">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">San Juan</div><div class="temp-ciudad" id="temp-sanjuan">--°</div><div class="cond-ciudad" id="cond-sanjuan">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">San Luis</div><div class="temp-ciudad" id="temp-sanluis">--°</div><div class="cond-ciudad" id="cond-sanluis">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">La Rioja</div><div class="temp-ciudad" id="temp-larioja">--°</div><div class="cond-ciudad" id="cond-larioja">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Catamarca</div><div class="temp-ciudad" id="temp-catamarca">--°</div><div class="cond-ciudad" id="cond-catamarca">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Jujuy</div><div class="temp-ciudad" id="temp-jujuy">--°</div><div class="cond-ciudad" id="cond-jujuy">Cargando</div></div>
+            </div>
+        </div>
+
+        <div class="placa" id="placa-3">
+            <div class="titulo-placa"><i class="fa-solid fa-umbrella-beach"></i> Red Nacional: Litoral y Costa Atlántica</div>
+            <div class="grilla-clima">
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Buenos Aires</div><div class="temp-ciudad" id="temp-bsas">--°</div><div class="cond-ciudad" id="cond-bsas">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Mar del Plata</div><div class="temp-ciudad" id="temp-mdq">--°</div><div class="cond-ciudad" id="cond-mdq">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">La Plata</div><div class="temp-ciudad" id="temp-laplata">--°</div><div class="cond-ciudad" id="cond-laplata">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Santa Fe</div><div class="temp-ciudad" id="temp-santafe">--°</div><div class="cond-ciudad" id="cond-santafe">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Paraná</div><div class="temp-ciudad" id="temp-parana">--°</div><div class="cond-ciudad" id="cond-parana">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Corrientes</div><div class="temp-ciudad" id="temp-corrientes">--°</div><div class="cond-ciudad" id="cond-corrientes">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Posadas</div><div class="temp-ciudad" id="temp-posadas">--°</div><div class="cond-ciudad" id="cond-posadas">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Resistencia</div><div class="temp-ciudad" id="temp-resistencia">--°</div><div class="cond-ciudad" id="cond-resistencia">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Formosa</div><div class="temp-ciudad" id="temp-formosa">--°</div><div class="cond-ciudad" id="cond-formosa">Cargando</div></div>
+            </div>
+        </div>
+
+        <div class="placa" id="placa-4">
+            <div class="titulo-placa"><i class="fa-solid fa-snowflake"></i> Red Nacional: Patagonia</div>
+            <div class="grilla-clima">
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Neuquén</div><div class="temp-ciudad" id="temp-neuquen">--°</div><div class="cond-ciudad" id="cond-neuquen">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Bariloche</div><div class="temp-ciudad" id="temp-bariloche">--°</div><div class="cond-ciudad" id="cond-bariloche">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Santa Rosa (LP)</div><div class="temp-ciudad" id="temp-santarosalp">--°</div><div class="cond-ciudad" id="cond-santarosalp">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Viedma</div><div class="temp-ciudad" id="temp-viedma">--°</div><div class="cond-ciudad" id="cond-viedma">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Rawson</div><div class="temp-ciudad" id="temp-rawson">--°</div><div class="cond-ciudad" id="cond-rawson">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Río Gallegos</div><div class="temp-ciudad" id="temp-gallegos">--°</div><div class="cond-ciudad" id="cond-gallegos">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Ushuaia</div><div class="temp-ciudad" id="temp-ushuaia">--°</div><div class="cond-ciudad" id="cond-ushuaia">Cargando</div></div>
+            </div>
+        </div>
+
+        <div class="placa" id="placa-5">
+            <div class="titulo-placa"><i class="fa-solid fa-earth-americas"></i> Monitoreo Internacional (LATAM)</div>
+            <div class="grilla-clima">
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Santiago (CL)</div><div class="temp-ciudad" id="temp-santiago">--°</div><div class="cond-ciudad" id="cond-santiago">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Montevideo</div><div class="temp-ciudad" id="temp-montevideo">--°</div><div class="cond-ciudad" id="cond-montevideo">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Asunción</div><div class="temp-ciudad" id="temp-asuncion">--°</div><div class="cond-ciudad" id="cond-asuncion">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Río de Janeiro</div><div class="temp-ciudad" id="temp-rio">--°</div><div class="cond-ciudad" id="cond-rio">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">La Paz (BO)</div><div class="temp-ciudad" id="temp-lapazbol">--°</div><div class="cond-ciudad" id="cond-lapazbol">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Lima</div><div class="temp-ciudad" id="temp-lima">--°</div><div class="cond-ciudad" id="cond-lima">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Bogotá</div><div class="temp-ciudad" id="temp-bogota">--°</div><div class="cond-ciudad" id="cond-bogota">Cargando</div></div>
+                <div class="tarjeta-localidad"><div class="nombre-ciudad">Quito</div><div class="temp-ciudad" id="temp-quito">--°</div><div class="cond-ciudad" id="cond-quito">Cargando</div></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="zocalo">
+        <div style="display: flex; align-items: center; gap: 12px; font-size: 1.2rem; font-weight: 700;">
+            <i class="fa-solid fa-satellite" style="color: #deff9a;"></i>
+            ESTACIÓN ZÚÑIGA <span style="font-weight: 400; color: #a0a0a0; font-size: 1rem;">| Red de Monitoreo Federal e Internacional</span>
+        </div>
+        <div class="vivo-pulso">EN VIVO</div>
+    </div>
+
+    <script>
+        const ciudades = {
+            "junin": { lat: -33.14, lon: -68.49, tempId: "temp-junin", condId: "cond-junin" },
+            "rivadavia": { lat: -33.19, lon: -68.45, tempId: "temp-rivadavia", condId: "cond-rivadavia" },
+            "santarosa": { lat: -33.25, lon: -68.14, tempId: "temp-santarosa", condId: "cond-santarosa" },
+            "lapaz": { lat: -33.46, lon: -67.55, tempId: "temp-lapaz", condId: "cond-lapaz" },
+            "mendozacap": { lat: -32.88, lon: -68.84, tempId: "temp-mendozacap", condId: "cond-mendozacap" },
+            "godoycruz": { lat: -32.91, lon: -68.83, tempId: "temp-godoycruz", condId: "cond-godoycruz" },
+            "guaymallen": { lat: -32.90, lon: -68.80, tempId: "temp-guaymallen", condId: "cond-guaymallen" },
+            "maipu": { lat: -32.97, lon: -68.78, tempId: "temp-maipu", condId: "cond-maipu" },
+            "lasheras": { lat: -32.85, lon: -68.83, tempId: "temp-lasheras", condId: "cond-lasheras" },
+            "lujan": { lat: -33.03, lon: -68.87, tempId: "temp-lujan", CCondId: "cond-lujan" },
+            "lavalle": { lat: -32.72, lon: -68.59, tempId: "temp-lavalle", condId: "cond-lavalle" },
+            
+            "sanrafael": { lat: -34.61, lon: -68.33, tempId: "temp-sanrafael", condId: "cond-sanrafael" },
+            "malargue": { lat: -35.47, lon: -69.58, tempId: "temp-malargue", condId: "cond-malargue" },
+            "alvear": { lat: -34.97, lon: -67.69, tempId: "temp-alvear", condId: "cond-alvear" },
+            "tunuyan": { lat: -33.57, lon: -69.01, tempId: "temp-tunuyan", condId: "cond-tunuyan" },
+            "sancarlos": { lat: -33.77, lon: -69.04, tempId: "temp-sancarlos", condId: "cond-sancarlos" },
+            "tupungato": { lat: -33.37, lon: -69.14, tempId: "temp-tupungato", condId: "cond-tupungato" },
+
+            "cordoba": { lat: -31.41, lon: -64.18, tempId: "temp-cordoba", condId: "cond-cordoba" },
+            "rosario": { lat: -32.94, lon: -60.63, tempId: "temp-rosario", condId: "cond-rosario" },
+            "tucuman": { lat: -26.82, lon: -65.22, tempId: "temp-tucuman", condId: "cond-tucuman" },
+            "salta": { lat: -24.78, lon: -65.41, tempId: "temp-salta", condId: "cond-salta" },
+            "santiagoest": { lat: -27.78, lon: -64.26, tempId: "temp-santiagoest", condId: "cond-santiagoest" },
+            "sanjuan": { lat: -31.53, lon: -68.53, tempId: "temp-sanjuan", condId: "cond-sanjuan" },
+            "sanluis": { lat: -33.29, lon: -66.33, tempId: "temp-sanluis", condId: "cond-sanluis" },
+            "larioja": { lat: -29.41, lon: -66.85, tempId: "temp-larioja", condId: "cond-larioja" },
+            "catamarca": { lat: -28.46, lon: -65.78, tempId: "temp-catamarca", condId: "cond-catamarca" },
+            "jujuy": { lat: -24.18, lon: -65.29, tempId: "temp-jujuy", condId: "cond-jujuy" },
+
+            "bsas": { lat: -34.60, lon: -58.38, tempId: "temp-bsas", condId: "cond-bsas" },
+            "mdq": { lat: -38.00, lon: -57.54, tempId: "temp-mdq", condId: "cond-mdq" },
+            "laplata": { lat: -34.92, lon: -57.95, tempId: "temp-laplata", condId: "cond-laplata" },
+            "santafe": { lat: -31.63, lon: -60.70, tempId: "temp-santafe", condId: "cond-santafe" },
+            "parana": { lat: -31.73, lon: -60.51, tempId: "temp-parana", condId: "cond-parana" },
+            "corrientes": { lat: -27.46, lon: -58.83, tempId: "temp-corrientes", condId: "cond-corrientes" },
+            "posadas": { lat: -27.36, lon: -55.89, tempId: "temp-posadas", condId: "cond-posadas" },
+            "resistencia": { lat: -27.46, lon: -58.98, tempId: "temp-resistencia", condId: "cond-resistencia" },
+            "formosa": { lat: -26.17, lon: -58.17, tempId: "temp-formosa", condId: "cond-formosa" },
+
+            "neuquen": { lat: -38.95, lon: -68.05, tempId: "temp-neuquen", condId: "cond-neuquen" },
+            "bariloche": { lat: -41.14, lon: -71.30, tempId: "temp-bariloche", condId: "cond-bariloche" },
+            "santarosalp": { lat: -36.62, lon: -64.28, tempId: "temp-santarosalp", condId: "cond-santarosalp" },
+            "viedma": { lat: -40.81, lon: -62.99, tempId: "temp-viedma", condId: "cond-viedma" },
+            "rawson": { lat: -43.30, lon: -65.10, tempId: "temp-rawson", condId: "cond-rawson" },
+            "gallegos": { lat: -51.62, lon: -69.21, tempId: "temp-gallegos", condId: "cond-gallegos" },
+            "ushuaia": { lat: -54.80, lon: -68.30, tempId: "temp-ushuaia", condId: "cond-ushuaia" },
+
+            "santiago": { lat: -33.44, lon: -70.66, tempId: "temp-santiago", condId: "cond-santiago" },
+            "montevideo": { lat: -34.90, lon: -56.16, tempId: "temp-montevideo", condId: "cond-montevideo" },
+            "asuncion": { lat: -25.26, lon: -57.57, tempId: "temp-asuncion", condId: "cond-asuncion" },
+            "rio": { lat: -22.90, lon: -43.17, tempId: "temp-rio", condId: "cond-rio" },
+            "lapazbol": { lat: -16.50, lon: -68.15, tempId: "temp-lapazbol", condId: "cond-lapazbol" },
+            "lima": { lat: -12.04, lon: -77.02, tempId: "temp-lima", condId: "cond-lima" },
+            "bogota": { lat: 4.60, lon: -74.08, tempId: "temp-bogota", condId: "cond-bogota" },
+            "quito": { lat: -0.22, lon: -78.52, tempId: "temp-quito", condId: "cond-quito" }
+        };
+
+        function traducirCielo(code) {
+            const tabla = { 0: "Despejado", 1: "Limpio", 2: "Algo Nublado", 3: "Nublado", 45: "Niebla", 51: "Llovizna", 61: "Lluvia", 80: "Chubascos", 95: "Tormenta" };
+            return tabla[code] || "Estable";
+        }
+
+        async function cargarClima() {
+            for (const key in ciudades) {
+                try {
+                    const c = ciudades[key];
+                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${c.lat}&longitude=${c.lon}&current_weather=true`);
+                    const data = await res.json();
+                    if (data && data.current_weather) {
+                        if(document.getElementById(c.tempId)) document.getElementById(c.tempId).innerText = Math.round(data.current_weather.temperature) + "°";
+                        if(document.getElementById(c.condId)) document.getElementById(c.condId).innerText = traducirCielo(data.current_weather.weathercode);
+                    }
+                } catch (e) { console.log("Error en:", key); }
+            }
+        }
+
+        let enPortada = true;
+        let indice = -1; 
+        const placasDatos = [
+            document.getElementById('placa-0'),
+            document.getElementById('placa-1'),
+            document.getElementById('placa-2'),
+            document.getElementById('placa-3'),
+            document.getElementById('placa-4'),
+            document.getElementById('placa-5')
+        ];
+
+        function rotarPlacas() {
+            if (enPortada) {
+                document.getElementById('placa-intro').classList.remove('activa');
+                enPortada = false;
+                indice = 0;
+                placasDatos[indice].classList.add('activa');
+            } else {
+                placasDatos[indice].classList.remove('activa');
+                indice = (indice + 1) % placasDatos.length;
+                placasDatos[indice].classList.add('activa');
+            }
+        }
+
+        cargarClima();
+        
+        setTimeout(() => {
+            rotarPlacas(); 
+            setInterval(rotarPlacas, 8000); 
+        }, 10000);
+
+        setInterval(cargarClima, 600000); 
+    </script>
+</body>
+</html>

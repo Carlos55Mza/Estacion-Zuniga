@@ -116,6 +116,19 @@ async function updateWeatherLocation(val) {
     // Si tenés o agregás un id="uv-display" en el HTML, te inyecta el índice UV directo en la home
     if(document.getElementById('uv-display')) document.getElementById('uv-display').innerText = `UV: ${uvFinal}`;
 
+    // 🔀 PUENTE DIRECTO AL ASESOR DE VESTUARIO (INYECTADO CON ÉXITO)
+    try {
+        const iframeAsesor = document.getElementById('iframe-asesor');
+        if (iframeAsesor && iframeAsesor.contentWindow) {
+            iframeAsesor.contentWindow.postMessage({
+                sensacion: stFinal,
+                viento: windSpeedFinal
+            }, '*');
+        }
+    } catch (errAsesor) {
+        console.log("Error enviando datos al asesor:", errAsesor);
+    }
+
     // Animación del molino según la fuerza del viento
     const windIcon = document.getElementById('wind-icon');
     if (windIcon && windSpeedFinal !== "--" && windSpeedFinal > 0) {
